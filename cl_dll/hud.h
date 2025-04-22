@@ -20,7 +20,7 @@
 // CHud handles the message, calculation, and drawing the HUD
 //
 
-#define RGB_YELLOWISH 0x0000a550 //255, 218, 185
+#define RGB_YELLOWISH 0x0000A000 //255, 218, 185, теперь оно зеленое
 #define RGB_REDISH 0x00FF1010 //255,160,0
 #define RGB_GREENISH 0x0000A000 //240, 230, 140
 
@@ -67,6 +67,8 @@ class CHudBase
 {
 public:
 	POSITION  m_pos;
+
+
 	int   m_type;
 	int	  m_iFlags; // active, moving, 
 	virtual		~CHudBase() {}
@@ -560,15 +562,30 @@ public:
 	int Init(void);
 	int VidInit(void);
 	int Draw(float flTime);
-	int MsgFunc_ZoomHUD(const char* pszName, int iSize, void* pbuf);
+	int MsgFunc_ZoomHud(const char* pszName, int iSize, void* pbuf);
 	void DrawQuad(float xmin, float ymin, float xmax, float ymax);
 	int m_iHudMode;
 private:
-	HSPRITE m_hBottom_Left;
-	HSPRITE m_hBottom_Right;
-	HSPRITE m_hTop_Left;
-	HSPRITE m_hTop_Right;
-	HSPRITE m_hBlack;
+	HSPRITE m_hScope;
+};
+
+//
+//-----------------------------------------------------
+//
+class CHudUse : public CHudBase
+{
+public:
+	int Init(void);
+	int VidInit(void);
+	int Draw(float flTime);
+	void DrawQuad(float xmin, float ymin, float xmax, float ymax);
+
+	// MESSAGE IMPLEMENTATION
+	int MsgFunc_ShowUseHud(const char* pszName, int iSize, void* pbuf);
+
+private:
+	HSPRITE		m_hIcon;
+	int			m_bHudMode;
 };
 
 class CHud
@@ -591,12 +608,16 @@ public:
 	double m_flTimeDelta; // the difference between flTime and fOldTime
 	Vector	m_vecOrigin;
 	Vector	m_vecAngles;
+	int                         NormalSize;
+	int                         RealSize;
 	int		m_iKeyBits;
 	int		m_iHideHUDDisplay;
 	int		m_iFOV;
 	int		m_Teamplay;
 	int		m_iRes;
 	cvar_t  *m_pCvarStealMouse;
+	//cvar_t* m_pCvarDraw;
+	//cvar_t* RainInfo; // rain tutorial
 	cvar_t	*m_pCvarDraw;
 
 	int m_iFontHeight;
@@ -645,7 +666,8 @@ public:
 	CHudTextMessage m_TextMessage;
 	CHudStatusIcons m_StatusIcons;
 	CHudBenchmark	m_Benchmark;
-	CHudZoom m_Zoom;
+	CHudZoom		m_Zoom;
+	CHudUse			m_Use;
 
 	void Init( void );
 	void VidInit( void );
@@ -665,6 +687,10 @@ public:
 	void _cdecl MsgFunc_ViewMode( const char *pszName, int iSize, void *pbuf );
 	int _cdecl MsgFunc_SetFOV(const char *pszName,  int iSize, void *pbuf);
 	int  _cdecl MsgFunc_Concuss( const char *pszName, int iSize, void *pbuf );
+	int _cdecl MsgFunc_WaterSplash(const char* pszName, int iSize, void* pbuf);
+	int _cdecl MsgFunc_Impact(const char* pszName, int iSize, void* pbuf);
+
+
 
 	// Screen information
 	SCREENINFO	m_scrinfo;
@@ -684,7 +710,6 @@ public:
 };
 
 extern CHud gHUD;
-
 extern int g_iPlayerClass;
 extern int g_iTeamNumber;
 extern int g_iUser1;

@@ -83,6 +83,12 @@ public:
 #define WEAPON_STEN			    18
 #define WEAPON_KNIFE 19 //ѕор€дковый номер нашего оружи€
 #define	WEAPON_MP44			20
+#define	WEAPON_K43RIFLE		21
+#define	WEAPON_PPSH		22
+#define	WEAPON_TOMMY		23
+#define	WEAPON_TETEREV		24
+#define	WEAPON_MARIA		25
+#define	WEAPON_PLASMARIFLE		26
 
 #define WEAPON_ALLWEAPONS		(~(1<<WEAPON_SUIT))
 
@@ -111,7 +117,7 @@ public:
 #define TRIPMINE_WEIGHT		-10
 #define SNIPERRIFLE_WEIGHT  10
 #define VENOM_WEIGHT 15
-
+#define PLASMARIFLE_WEIGHT 20
 
 // weapon clip/carry ammo capacities
 #define URANIUM_MAX_CARRY		100
@@ -119,14 +125,16 @@ public:
 #define _357_MAX_CARRY			36
 #define BUCKSHOT_MAX_CARRY		125
 #define BOLT_MAX_CARRY			50
-#define ROCKET_MAX_CARRY		5
+#define ROCKET_MAX_CARRY		8
 #define HANDGRENADE_MAX_CARRY	10
 #define SATCHEL_MAX_CARRY		5
 #define TRIPMINE_MAX_CARRY		5
 #define SNARK_MAX_CARRY			15
-#define HORNET_MAX_CARRY		8
+#define HORNET_MAX_CARRY		4
 #define M203_GRENADE_MAX_CARRY	10
 #define _338_MAX_CARRY 200
+#define PLASMARIFLE_MAX_CARRY 200
+
 
 // the maximum amount of ammo each weapon's clip can hold
 #define WEAPON_NOCLIP			-1
@@ -134,10 +142,10 @@ public:
 //#define CROWBAR_MAX_CLIP		WEAPON_NOCLIP
 #define GLOCK_MAX_CLIP			9
 #define PYTHON_MAX_CLIP			6
-#define MP5_MAX_CLIP			30
+#define MP5_MAX_CLIP			32
 #define SHOTGUN_MAX_CLIP		8
 #define CROSSBOW_MAX_CLIP		5
-#define RPG_MAX_CLIP			1
+#define RPG_MAX_CLIP			4
 #define GAUSS_MAX_CLIP			WEAPON_NOCLIP
 #define EGON_MAX_CLIP			WEAPON_NOCLIP
 #define HORNETGUN_MAX_CLIP		WEAPON_NOCLIP
@@ -147,6 +155,8 @@ public:
 #define SNARK_MAX_CLIP			WEAPON_NOCLIP
 #define SNIPERRIFLE_MAX_CLIP	10
 #define VENOM_MAX_CLIP          100
+#define PLASMARIFLE_MAX_CLIP 60
+
 
 
 
@@ -165,9 +175,13 @@ public:
 #define SATCHEL_DEFAULT_GIVE		1
 #define TRIPMINE_DEFAULT_GIVE		1
 #define SNARK_DEFAULT_GIVE			5
-#define HIVEHAND_DEFAULT_GIVE		8
+#define HIVEHAND_DEFAULT_GIVE		60
 #define SNIPERRIFLE_DEFAULT_GIVE	10
 #define VENOM_DEFAULT_GIVE			100
+#define TETEREV_DEFAULT_GIVE		12
+#define MARIA_DEFAULT_GIVE		7
+#define PLASMARIFLE_DEFAULT_GIVE		60 //это тоже плазмо
+#define AMMO_PLASMORIFLE_GIVE 30
 
 
 // The amount of ammo given to a player by an ammo item.
@@ -196,7 +210,10 @@ typedef	enum
 	BULLET_PLAYER_CROWBAR, // crowbar swipe
 	BULLET_PLAYER_338,
 	BULLET_PLAYER_MP44AMM,
-
+	BULLET_PLAYER_PPSHAMMO,
+	BULLET_PLAYER_TOMMYAMMO,
+	BULLET_PLAYER_K43,
+	BULLET_PLAYER_SNIPER,
 	BULLET_MONSTER_9MM,
 	BULLET_MONSTER_MP5,
 	BULLET_MONSTER_12MM,
@@ -241,6 +258,11 @@ public:
 	virtual int		Save( CSave &save );
 	virtual int		Restore( CRestore &restore );
 	
+	//Ёто тоже дл€ юза на ≈
+	/*void Use(CBaseEntity* pActivator, CBaseEntity* pCaller,
+		USE_TYPE useType, float value);
+	int ObjectCaps() { return FCAP_IMPULSE_USE; };*/
+
 	static	TYPEDESCRIPTION m_SaveData[];
 
 	virtual int AddToPlayer( CBasePlayer *pPlayer );	// return TRUE if the item you want the item added to the player inventory
@@ -308,6 +330,12 @@ public:
 	virtual int		Restore( CRestore &restore );
 	
 	static	TYPEDESCRIPTION m_SaveData[];
+
+	//Ёто тоже часть кода подбирание на ≈
+	//void Use(CBaseEntity* pActivator, CBaseEntity* pCaller,
+		//USE_TYPE useType, float value);
+
+		//int ObjectCaps() { return FCAP_IMPULSE_USE; };
 
 	// generic weapon versions of CBasePlayerItem calls
 	virtual int AddToPlayer( CBasePlayer *pPlayer );
@@ -387,6 +415,10 @@ public:
 
 	CBaseEntity* Respawn( void );
 	void EXPORT Materialize( void );
+	//тоже часть кода на подбирание пушки на use(E)
+	/*int ObjectCaps() { return FCAP_IMPULSE_USE; };
+	void Use(CBaseEntity* pActivator, CBaseEntity* pCaller,
+		USE_TYPE useType, float value);*/
 };
 
 
@@ -400,6 +432,11 @@ extern DLL_GLOBAL	short	g_sModelIndexWExplosion;// holds the index for the under
 extern DLL_GLOBAL	short	g_sModelIndexBubbles;// holds the index for the bubbles model
 extern DLL_GLOBAL	short	g_sModelIndexBloodDrop;// holds the sprite index for blood drops
 extern DLL_GLOBAL	short	g_sModelIndexBloodSpray;// holds the sprite index for blood spray (bigger)
+extern DLL_GLOBAL short g_sModelIndexPlasma1;
+extern DLL_GLOBAL short g_sModelIndexPlasma2;
+extern DLL_GLOBAL short g_sModelIndexPlasma3;
+
+
 
 extern void ClearMultiDamage(void);
 extern void ApplyMultiDamage(entvars_t* pevInflictor, entvars_t* pevAttacker );
@@ -517,6 +554,112 @@ private:
 	unsigned short m_usFireGlock2;
 };
 
+//teterev
+class CTeterev : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 2; }
+	int GetItemInfo(ItemInfo* p);
+
+	void PrimaryAttack(void);
+	//void SecondaryAttack( void );
+	void TeterevFireAttack(float flSpread, float flCycleTime, BOOL fUseAutoAim);
+	BOOL Deploy(void);
+	void Reload(void);
+	/*void SpawnClip(void);*/
+	void WeaponIdle(void);
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	int m_iShell;
+
+
+	unsigned short m_usTeterevFire;
+	/*unsigned short m_usMakarovFire2;*/
+};
+
+//Colt_maria
+class CMaria : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 2; }
+	int GetItemInfo(ItemInfo* p);
+
+	void PrimaryAttack(void);
+	//void SecondaryAttack( void );
+	void MariaFireAttack(float flSpread, float flCycleTime, BOOL fUseAutoAim);
+	BOOL Deploy(void);
+	void Reload(void);
+	/*void SpawnClip(void);*/
+	void WeaponIdle(void);
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	int m_iShell;
+
+
+	unsigned short m_usMariaFire;
+	/*unsigned short m_usMakarovFire2;*/
+};
+
+//EnergoGun
+class CPlasmarifle : public CBasePlayerWeapon
+{
+public:
+
+#ifndef CLIENT_DLL
+	int Save(CSave& save);
+	int Restore(CRestore& restore);
+	static TYPEDESCRIPTION m_SaveData[];
+#endif
+
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot() { return 7; }
+	int GetItemInfo(ItemInfo* p);
+	int AddToPlayer(CBasePlayer* pPlayer);
+
+	void PrimaryAttack(void);
+	BOOL Deploy();
+	void Holster(void);
+	void Reload(void);
+	void WeaponIdle(void);
+	float m_flSoundDelay;
+	float m_flNextReload;
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+	int m_iPlasmaSprite;
+	int m_iMazzlePlasma;
+private:
+	unsigned short m_usPlasmaFire;
+};
 
 class CCrowbar : public CBasePlayerWeapon
 {
@@ -710,7 +853,7 @@ public:
 
 	void Spawn( void );
 	void Precache( void );
-	void Reload( void );
+	//void Reload( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
 	int AddToPlayer( CBasePlayer *pPlayer );
@@ -723,11 +866,11 @@ public:
 	void SecondaryAttack( void );
 	void WeaponIdle( void );
 
-	void UpdateSpot( void );
+	//void UpdateSpot( void );
 	BOOL ShouldWeaponIdle( void ) { return TRUE; };
 
-	CLaserSpot *m_pSpot;
-	int m_fSpotActive;
+	//CLaserSpot *m_pSpot;
+	//int m_fSpotActive;
 	int m_cActiveRockets;// how many missiles in flight from this launcher right now?
 
 	virtual BOOL UseDecrement( void )
@@ -878,6 +1021,8 @@ private:
 
 class CHgun : public CBasePlayerWeapon
 {
+
+	typedef CBasePlayerWeapon BaseClass;
 public:
 	void Spawn( void );
 	void Precache( void );
@@ -887,6 +1032,7 @@ public:
 
 	void PrimaryAttack( void );
 	void SecondaryAttack( void );
+	void ItemPostFrame( void );
 	BOOL Deploy( void );
 	BOOL IsUseable( void );
 	void Holster( int skiplocal = 0 );
@@ -897,6 +1043,8 @@ public:
 	float m_flRechargeTime;
 	
 	int m_iFirePhase;// don't save me.
+
+	bool m_bInReload;
 
 	virtual BOOL UseDecrement( void )
 	{ 
@@ -1077,9 +1225,14 @@ public:
 
 	void PrimaryAttack(void);
 	void SecondaryAttack(void);
+	void ItemPostFrame(void);
 	int SecondaryAmmoIndex(void);
 	BOOL Deploy(void);
 	void Reload(void);
+	void Spinup(void);
+	void Spindown(void);
+	void ReduceRotation(void);
+	void Holster(int skiplocal = 0);
 	//void SpawnClip(void);
 	void WeaponIdle(void);
 	float m_flNextAnimTime;
@@ -1097,6 +1250,9 @@ public:
 private:
 	unsigned short m_usVenom;
 	unsigned short m_usVenom2;
+	unsigned short m_usVenom3;
+	float m_flRotationSpeed;
+	float m_flPlayerSpeed;
 };
 
 class CStenGun : public CBasePlayerWeapon
@@ -1124,6 +1280,60 @@ public:
 private:
 	unsigned short m_usStenFire;
 };
+
+class CPPSH : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	BOOL Deploy(void);//пуха в руках
+	void WeaponIdle(void); //спокойсвтие пухи
+	void PrimaryAttack(); //пушка делает пих-пах
+	void Reload(void); //перезар€дка
+	int iItemSlot(void) { return 0; }
+	int GetItemInfo(ItemInfo* p);
+	int AddToPlayer(CBasePlayer*);
+
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+private:
+	unsigned short m_usPpshFire;
+};
+
+//tommygun
+class CTOMMY : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	BOOL Deploy(void);//пуха в руках
+	void WeaponIdle(void); //спокойсвтие пухи
+	void PrimaryAttack(); //пушка делает пих-пах
+	void Reload(void); //перезар€дка
+	int iItemSlot(void) { return 0; }
+	int GetItemInfo(ItemInfo* p);
+	int AddToPlayer(CBasePlayer*);
+
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+private:
+	unsigned short m_usTommyFire;
+};
+
 
 class CKnife : public CBasePlayerWeapon
 {
@@ -1178,6 +1388,44 @@ public:
 	}
 private:
 	unsigned short m_usMp44Fire;
+};
+
+
+class CWrifle : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
+	int iItemSlot(void) { return 2; }
+	int GetItemInfo(ItemInfo* p); //в чем тво€ проблема?
+	int AddToPlayer(CBasePlayer* pPlayer);
+	void PrimaryAttack(void);
+	void SecondaryAttack(void);
+	BOOL Deploy(void);
+	void Holster(int skiplocal = 0);//починилось
+	void Reload(void);
+	void WeaponIdle(void);
+
+	BOOL m_fInZoom;// don't save this. 
+
+	virtual BOOL UseDecrement(void)
+	{
+#if defined( CLIENT_WEAPONS )
+		return TRUE;
+#else
+		return FALSE;
+#endif
+	}
+
+private:
+	unsigned short m_usRifleK43Fire;
+};
+
+class CPlasmaGun : public CBasePlayerWeapon
+{
+public:
+	void Spawn(void);
+	void Precache(void);
 };
 
 #endif // WEAPONS_H
