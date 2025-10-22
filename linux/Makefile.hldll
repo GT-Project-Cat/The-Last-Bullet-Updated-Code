@@ -144,8 +144,8 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/rifle.o \
 	$(HLDLL_OBJ_DIR)/mutant_blade.o \
 	$(HLDLL_OBJ_DIR)/healtypacket.o \
-	$(HLDLL_OBJ_DIR)/BonusWhiskey.o
-
+	$(HLDLL_OBJ_DIR)/BonusWhiskey.o \
+	$(HLDLL_OBJ_DIR)/plasma.o
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o

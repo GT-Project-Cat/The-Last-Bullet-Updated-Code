@@ -91,8 +91,9 @@ HL1_OBJS = \
 	$(HL1_OBJ_DIR)/vgui_teammenu.o \
 	$(HL1_OBJ_DIR)/voice_status.o \
 	$(HL1_OBJ_DIR)/hud_servers.o \
-	
-
+	$(HL1_OBJ_DIR)/helmet.o \
+	$(HL1_OBJ_DIR)/zoom.o \
+	$(HL1_OBJ_DIR)/hud_use.o
 DLL_OBJS = \
 	$(HL1_SERVER_OBJ_DIR)/crossbow.o \
 	$(HL1_SERVER_OBJ_DIR)/crowbar.o \
