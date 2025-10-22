@@ -29,9 +29,10 @@ ARCH=i386
 ELF-GC-DYNSTR=./elf-gc-dynstr
 
 ifeq ($(OS),Linux)
-	CC="/valve/bin/gcc-4.6 -m32"
-	CPLUS="/valve/bin/g++-4.6 -m32"
-	CPP_LIB:=-L$(shell /valve/bin/g++-4.6 -m32 -print-file-name=libstdc++.so | xargs dirname) -lstdc++ -ldl -lpthread
+	CC="/usr/bin/gcc-5 -m32 -std=gnu++11 -fno-delete-null-pointer-checks -fno-gnu-unique -fvisibility=hidden"
+	CPLUS="/usr/bin/g++-5 -m32 -std=gnu++11 -fno-delete-null-pointer-checks -fno-gnu-unique -fvisibility=hidden"
+	CPP_LIB:=-L$(shell /usr/bin/g++-5 -m32 -print-file-name=libstdc++.so | xargs dirname) -lstdc++ -ldl -lpthread
+        CLINK=$(CC)
 endif
 
 ifeq ($(OS),Darwin)

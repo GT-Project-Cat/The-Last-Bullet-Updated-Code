@@ -108,6 +108,17 @@ DLL_OBJS = \
 	$(HL1_SERVER_OBJ_DIR)/squeakgrenade.o \
 	$(HL1_SERVER_OBJ_DIR)/tripmine.o \
 	$(HL1_SERVER_OBJ_DIR)/wpn_shared/hl_wpn_glock.o \
+	$(HL1_SERVER_OBJ_DIR)/Colt_Maria.o \
+	$(HL1_SERVER_OBJ_DIR)/K43_Rifle.o \
+	$(HL1_SERVER_OBJ_DIR)/Knife.o \
+	$(HL1_SERVER_OBJ_DIR)/plasmarifle.o  \
+	$(HL1_SERVER_OBJ_DIR)/ppsh_weapons.o \
+	$(HL1_SERVER_OBJ_DIR)/venom.o \
+	$(HL1_SERVER_OBJ_DIR)/Sten.o \
+	$(HL1_SERVER_OBJ_DIR)/teterev.o \
+	$(HL1_SERVER_OBJ_DIR)/TommyGun.o \
+	$(HL1_SERVER_OBJ_DIR)/MP44.o \
+	$(HL1_SERVER_OBJ_DIR)/rifle.o 
 
 
 PUBLIC_OBJS = \

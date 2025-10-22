@@ -23,7 +23,7 @@
 #include	"cbase.h"
 #include	"monsters.h"
 #include	"schedule.h"
-#include <explode.h>
+#include 	"explode.h"
 
 
 //=========================================================
@@ -354,7 +354,7 @@ int CZombie::IgnoreConditions ( void )
 	
 }
 
-//новый зомбяка, из крипты. Ну крч та мумия красно-одноглазая.
+//пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ. пїЅпїЅ пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ-пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 
 class CCryptZombie : public CZombie
 {
@@ -362,7 +362,7 @@ public:
 	void Spawn(void);
 	void Precache(void);
 	void GibMonster(void);
-	short g_sModelIndexMetalGibs; //добавил эту строчку сюда затем в прекеш свою
+	short g_sModelIndexMetalGibs; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ
 	int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
 	void DeathSound(void);
 	static const char* pDeathSounds[];
@@ -498,7 +498,7 @@ int CCryptZombie::TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, fl
 	}
 
 	// HACK HACK -- until we fix this.
-	bitsDamageType |= DMG_ALWAYSGIB;//для гиба(разрыва на куски вместо смерти)
+	bitsDamageType |= DMG_ALWAYSGIB;//пїЅпїЅпїЅ пїЅпїЅпїЅпїЅ(пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ)
 	if (IsAlive())
 		PainSound();
 	return CBaseMonster::TakeDamage(pevInflictor, pevAttacker, flDamage, bitsDamageType);

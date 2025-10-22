@@ -1,3 +1,5 @@
 projects/vs2013/.vs
 projects/vs2013/Debug
 projects/vs2013/Release
+linux/release/
+linux/sdk

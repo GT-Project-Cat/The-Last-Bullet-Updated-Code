@@ -250,10 +250,7 @@ void CPlasmarifle::WeaponIdle( void )
 }
 
 void CPlasmarifle::Reload( void )
-
 {
-
-
 	DefaultReload( 60, PLASMARIFLE_RELOAD, 3, 1.4 );
 }
 

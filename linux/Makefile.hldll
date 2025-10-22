@@ -16,10 +16,10 @@ GAME_SHARED_OBJ_DIR=$(HLDLL_OBJ_DIR)/game_shared
 CFLAGS=$(BASE_CFLAGS)  $(ARCH_CFLAGS)  -DCLIENT_WEAPONS
 #-O3 -ffast-math -fno-strength-reduce
 
-HLDLL_INCLUDEDIRS=-I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(GAME_SHARED_SRC_DIR) -I$(PUBLIC_SRC_DIR)
-HLWPN_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
+HLDLL_INCLUDEDIRS=-I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(GAME_SHARED_SRC_DIR) -I$(PUBLIC_SRC_DIR) -I$(HLDLL_SRC_DIR)
+HLWPN_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR) -I$(GAME_SHARED_SRC_DIR)
 PM_INCLUDEDIRS=-I$(COMMON_SRC_DIR)  -I$(PUBLIC_SRC_DIR)
-GAME_SHARED_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR)
+GAME_SHARED_INCLUDEDIRS=-I$(HLDLL_SRC_DIR) -I$(ENGINE_SRC_DIR) -I$(COMMON_SRC_DIR) -I$(PM_SRC_DIR) -I$(PUBLIC_SRC_DIR) -I$(GAME_SHARED_SRC_DIR)
 
 LDFLAGS= -lm -lstdc++
 
@@ -127,7 +127,25 @@ HLDLL_OBJS = \
 	$(HLDLL_OBJ_DIR)/weapons.o \
 	$(HLDLL_OBJ_DIR)/world.o \
 	$(HLDLL_OBJ_DIR)/xen.o \
-	$(HLDLL_OBJ_DIR)/zombie.o
+	$(HLDLL_OBJ_DIR)/zombie.o \
+	$(HLDLL_OBJ_DIR)/fgrunt.o \
+	$(HLDLL_OBJ_DIR)/DrinkMed.o \
+	$(HLDLL_OBJ_DIR)/EeatHelthyKit.o \
+	$(HLDLL_OBJ_DIR)/Colt_Maria.o \
+	$(HLDLL_OBJ_DIR)/K43_Rifle.o \
+	$(HLDLL_OBJ_DIR)/Knife.o \
+	$(HLDLL_OBJ_DIR)/plasmarifle.o  \
+	$(HLDLL_OBJ_DIR)/ppsh_weapons.o \
+	$(HLDLL_OBJ_DIR)/venom.o \
+	$(HLDLL_OBJ_DIR)/Sten.o \
+	$(HLDLL_OBJ_DIR)/teterev.o \
+	$(HLDLL_OBJ_DIR)/TommyGun.o \
+	$(HLDLL_OBJ_DIR)/MP44.o \
+	$(HLDLL_OBJ_DIR)/rifle.o \
+	$(HLDLL_OBJ_DIR)/mutant_blade.o \
+	$(HLDLL_OBJ_DIR)/healtypacket.o \
+	$(HLDLL_OBJ_DIR)/BonusWhiskey.o
+
 
 HLWPN_OBJS = \
 	$(HLWPN_OBJ_DIR)/hl_wpn_glock.o
@@ -151,9 +169,9 @@ dirs:
 
 hl.$(SHLIBEXT): $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
 	$(CC) $(LDFLAGS) $(SHLIBLDFLAGS) -o $(BUILD_DIR)/$@ $(HLDLL_OBJS) $(HLWPN_OBJS) $(PM_OBJS) $(GAME_SHARED_OBJS)
-	p4 edit ../../game/mod/dlls/hl.$(SHLIBEXT)
-	cp $(BUILD_DIR)/$@  ../../game/mod/dlls/hl.$(SHLIBEXT)
-	./gendbg.sh ../../game/mod/dlls/hl.$(SHLIBEXT)
+	# p4 edit ../../game/mod/dlls/hl.$(SHLIBEXT)
+	cp $(BUILD_DIR)/$@  ../game/mod/dlls/hl.$(SHLIBEXT)
+	./gendbg.sh ../game/mod/dlls/hl.$(SHLIBEXT)
 	
 $(HLWPN_OBJ_DIR)/%.o : $(HLWPN_SRC_DIR)/%.cpp
 	$(DO_HLWPN_CC)
