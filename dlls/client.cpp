@@ -600,10 +600,10 @@ void ClientCommand( edict_t *pEntity )
 	}
 	else if (FStrEq(pcmd, "npc_create"))
 	{
-		int li_Dist = CVAR_GET_FLOAT("npc_create_dist");//запоминаем расстояние
-		char* ls_Arg = (char*)STRING(MAKE_STRING(CMD_ARGV(1))); // запоминаем имя npc/entity  
-		UTIL_MakeVectors(Vector(0, pev->v_angle.y, 0));//создаем вектор, определяем позицию
-		CBaseEntity::Create(ls_Arg, pev->origin + gpGlobals->v_forward * li_Dist, pev->angles);//создаем entity
+		int li_Dist = CVAR_GET_FLOAT("npc_create_dist");//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		char* ls_Arg = (char*)STRING(MAKE_STRING(CMD_ARGV(1))); // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ npc/entity  
+		UTIL_MakeVectors(Vector(0, pev->v_angle.y, 0));//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+		CBaseEntity::Create(ls_Arg, pev->origin + gpGlobals->v_forward * li_Dist, pev->angles);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ entity
 	}
 	else
 	{
@@ -933,7 +933,7 @@ const char *GetGameDescription()
 	if ( g_pGameRules ) // this function may be called before the world has spawned, and the game rules initialized
 		return g_pGameRules->GetGameDescription();
 	else
-		return "Half-Life";
+		return "The Last Bullet";
 }
 
 /*
@@ -1748,7 +1748,7 @@ void UpdateClientData ( const edict_t *ent, int sendweapons, struct clientdata_s
 			cd->vuser3.x = pl->ammo_wrifle;
 			cd->vuser3.y = pl->ammo_ppsh;
 			cd->vuser3.z = pl->ammo_tommy;
-			cd->vuser4.x = pl->ammo_pm; //патроны макарыча
+			cd->vuser4.x = pl->ammo_pm; //пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 			if ( pl->m_pActiveItem )
 			{
