@@ -4,14 +4,10 @@
 //
 // $NoKeywords: $
 //=============================================================================
-
 // com_model.h
 #pragma once
 #if !defined( COM_MODEL_H )
 #define COM_MODEL_H
-#if defined( _WIN32 )
-#pragma once
-#endif
 
 #define STUDIO_RENDER 1
 #define STUDIO_EVENTS 2
@@ -38,8 +34,6 @@
 #define ALIAS_XY_CLIP_MASK			0x000F
 
 #define	ZISCALE	((float)0x8000)
-
-#define CACHE_SIZE	32		// used to align key data structures
 
 typedef enum
 {

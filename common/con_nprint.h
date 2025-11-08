@@ -12,17 +12,10 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined( CON_NPRINTH )
-#define CON_NPRINTH
-#ifdef _WIN32
 #pragma once
 #if !defined(CON_NPRINT_H)
 #define CON_NPRINT_H
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-	
 typedef struct con_nprint_s
 {
 	int	index;		// Row #

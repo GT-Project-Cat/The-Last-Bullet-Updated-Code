@@ -12,9 +12,6 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#if !defined ( BEAMDEFH )
-#define BEAMDEFH
-#ifdef _WIN32
 #pragma once
 #if !defined(BEAMDEF_H)
 #define BEAMDEF_H
@@ -61,5 +58,3 @@ struct beam_s
 };
 
 #endif//BEAMDEF_H
-#endif
-#endif

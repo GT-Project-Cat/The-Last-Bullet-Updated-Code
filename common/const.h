@@ -55,11 +55,9 @@
 #define FL_KILLME		(1<<30)	// This entity is marked for death -- This allows the engine to kill ents at the appropriate time
 #define FL_DORMANT		(1<<31)	// Entity is dormant, no updates to client
 
-
 // Goes into globalvars_t.trace_flags
 #define FTRACE_SIMPLEBOX		(1<<0)	// Traceline with a simple box
 #define FTRACE_IGNORE_GLASS		(1<<1)	// traceline will be ignored entities with rendermode != kRenderNormal
-
 
 // walkmove modes
 #define WALKMOVE_NORMAL		0	// normal walkmove
@@ -340,7 +338,6 @@
 // coord, coord, coord (pos) 
 // byte (radius in 10's) 
 // byte byte byte (color)
-// byte (brightness)
 // byte (life in 10's)
 // byte (decay rate in 10's)
 
@@ -358,7 +355,6 @@
 // byte Effect 0 = fade in/fade out
 // 1 is flickery credits
 // 2 is write out (training room)
-
 // 4 bytes r,g,b,a color1	(text color)
 // 4 bytes r,g,b,a color2	(effect color)
 // ushort 8.8 fadein time
@@ -762,18 +758,6 @@ typedef struct
 	unsigned	r, g, b, a;
 } colorVec;
 
-#ifdef _WIN32
-#pragma pack(push,2)
-#endif
-
-typedef struct
-{
-	unsigned short r, g, b, a;
-} PackedColorVec;
-
-#ifdef _WIN32
-#pragma pack(pop)
-#endif
 typedef struct link_s
 {
 	struct link_s	*prev, *next;
