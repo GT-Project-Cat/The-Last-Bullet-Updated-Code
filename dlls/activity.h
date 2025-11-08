@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *	
 *	This product contains software technology licensed from Id 
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-
-#ifndef	ACTIVITY_H
+#pragma once
+#if !defined(ACTIVITY_H)
 #define	ACTIVITY_H
 
 
@@ -94,13 +94,13 @@ typedef enum {
 	ACT_FLINCH_LEFTARM,
 	ACT_FLINCH_RIGHTARM,
 	ACT_FLINCH_LEFTLEG,
-	ACT_FLINCH_RIGHTLEG,
+	ACT_FLINCH_RIGHTLEG
 } Activity;
 
-
-typedef struct {
-	int	type;
-	char *name;
+typedef struct
+{
+	int type;
+	const char *name;
 } activity_map_t;
 
 extern activity_map_t activity_map[];

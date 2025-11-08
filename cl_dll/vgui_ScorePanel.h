@@ -1,4 +1,4 @@
-//========= Copyright � 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright (c) 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -15,6 +15,7 @@
 #include<VGUI_Label.h>
 #include<VGUI_TextImage.h>
 #include "../game_shared/vgui_listbox.h"
+#include "cl_util.h"
 
 #include <ctype.h>
 
@@ -62,8 +63,7 @@ public:
 		_image[1]->getTextSize(w2, t2);
 
 		wide = w1 + w2;
-		tall = V_max(t1, t2);
-
+		tall = Q_max(t1, t2);
 		setSize(wide, tall);
 	}
 

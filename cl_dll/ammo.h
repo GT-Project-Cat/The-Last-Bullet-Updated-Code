@@ -12,8 +12,8 @@
 *   without written permission from Valve LLC.
 *
 ****/
-
-#ifndef __AMMO_H__
+#pragma once
+#if !defined(__AMMO_H__)
 #define __AMMO_H__
 
 #define MAX_WEAPON_NAME 128

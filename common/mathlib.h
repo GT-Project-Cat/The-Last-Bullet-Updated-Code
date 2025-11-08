@@ -13,25 +13,36 @@
 *
 ****/
 // mathlib.h
+#pragma once
+#if !defined(MATHLIB_H)
+#define MATHLIB_H
+#if !__cplusplus
+#include <math.h>
+#if HAVE_TGMATH_H
+#include <tgmath.h>
+#endif // HAVE_TGMATH_H
+#else // __cplusplus
+#if HAVE_CMATH
+#include <cmath>
+#else
+#include <math.h>
+#endif
+#endif // __cplusplus
 
 typedef float vec_t;
-#ifndef DID_VEC3_T_DEFINE
+
+#if !defined(DID_VEC3_T_DEFINE)
 #define DID_VEC3_T_DEFINE
 typedef vec_t vec3_t[3];
 #endif
-typedef vec_t vec4_t[4];	// x,y,z,w
-typedef vec_t vec5_t[5];
 
-typedef short vec_s_t;
-typedef vec_s_t vec3s_t[3];
-typedef vec_s_t vec4s_t[4];	// x,y,z,w
-typedef vec_s_t vec5s_t[5];
 
-typedef	int	fixed4_t;
-typedef	int	fixed8_t;
-typedef	int	fixed16_t;
-#ifndef M_PI
+#if !defined(M_PI)
 #define M_PI		3.14159265358979323846	// matches value in gcc v2 math.h
+#endif
+
+#if !defined(M_PI_F)
+#define M_PI_F		(float)M_PI
 #endif
 
 struct mplane_s;
@@ -41,7 +52,7 @@ extern	int nanmask;
 
 #define	IS_NAN(x) (((*(int *)&x)&nanmask)==nanmask)
 
-#ifndef VECTOR_H
+#if !defined(VECTOR_H)
 	#define DotProduct(x,y) ((x)[0]*(y)[0]+(x)[1]*(y)[1]+(x)[2]*(y)[2])
 #endif
 
@@ -63,60 +74,9 @@ void CrossProduct (const vec3_t v1, const vec3_t v2, vec3_t cross);
 float VectorNormalize (vec3_t v);		// returns vector length
 void VectorInverse (vec3_t v);
 void VectorScale (const vec3_t in, vec_t scale, vec3_t out);
-int Q_log2(int val);
 
 void R_ConcatRotations (float in1[3][3], float in2[3][3], float out[3][3]);
 void R_ConcatTransforms (float in1[3][4], float in2[3][4], float out[3][4]);
-
-// Here are some "manual" INLINE routines for doing floating point to integer conversions
-extern short new_cw, old_cw;
-
-typedef union DLONG {
-	int		i[2];
-	double	d;
-	float	f;
-	} DLONG;
-
-extern DLONG	dlong;
-
-#ifdef _WIN32
-void __inline set_fpu_cw(void)
-{
-_asm	
-	{		wait
-			fnstcw	old_cw
-			wait
-			mov		ax, word ptr old_cw
-			or		ah, 0xc
-			mov		word ptr new_cw,ax
-			fldcw	new_cw
-	}
-}
-
-int __inline quick_ftol(float f)
-{
-	_asm {
-		// Assumes that we are already in chop mode, and only need a 32-bit int
-		fld		DWORD PTR f
-		fistp	DWORD PTR dlong
-	}
-	return dlong.i[0];
-}
-
-void __inline restore_fpu_cw(void)
-{
-	_asm	fldcw	old_cw
-}
-#else
-#define set_fpu_cw() /* */
-#define quick_ftol(f) ftol(f)
-#define restore_fpu_cw() /* */
-#endif
-
-void FloorDivMod (double numer, double denom, int *quotient,
-		int *rem);
-fixed16_t Invert24To16(fixed16_t val);
-int GreatestCommonDivisor (int i1, int i2);
 
 void AngleVectors (const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
 void AngleVectorsTranspose (const vec3_t angles, vec3_t forward, vec3_t right, vec3_t up);
@@ -130,7 +90,6 @@ void NormalizeAngles( vec3_t angles );
 void InterpolateAngles( vec3_t start, vec3_t end, vec3_t output, float frac );
 float AngleBetweenVectors( const vec3_t v1, const vec3_t v2 );
 
-
 void VectorMatrix( vec3_t forward, vec3_t right, vec3_t up);
 void VectorAngles( const vec3_t forward, vec3_t angles );
 
@@ -138,8 +97,6 @@ int InvertMatrix( const float * m, float *out );
 
 int BoxOnPlaneSide (vec3_t emins, vec3_t emaxs, struct mplane_s *plane);
 float	anglemod(float a);
-
-
 
 #define BOX_ON_PLANE_SIDE(emins, emaxs, p)	\
 	(((p)->type < 3)?						\
@@ -156,3 +113,4 @@ float	anglemod(float a);
 	)										\
 	:										\
 		BoxOnPlaneSide( (emins), (emaxs), (p)))
+#endif // MATHLIB_H

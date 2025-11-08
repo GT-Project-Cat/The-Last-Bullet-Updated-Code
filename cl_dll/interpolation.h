@@ -13,31 +13,27 @@
 **
 ******************************************************************************/
 
-#ifndef INTERPOLATION_H
-#define INTERPOLATION_H
-#ifdef _WIN32
 #pragma once
-#endif
+#if !defined(INTERPOLATION_H)
+#define INTERPOLATION_H
 
 
 //  interpolation class
 class CInterpolation  
 {
 public:
-
 	CInterpolation();
 	virtual ~CInterpolation();
 
-	void SetWaypoints(vec3_t * prev, vec3_t start, vec3_t end, vec3_t * next);
+	void SetWaypoints( vec3_t *prev, vec3_t start, vec3_t end, vec3_t *next );
 	void SetViewAngles( vec3_t start, vec3_t end );
-	void SetFOVs(float start, float end);
-	void SetSmoothing(bool start, bool end);
-	
-	// get interpolated point 0 =< t =< 1, 0 = start, 1 = end
-	void Interpolate(float t, vec3_t &point, vec3_t &angle, float * fov);
-	
-protected:
+	void SetFOVs( float start, float end );
+	void SetSmoothing( bool start, bool end );
 
+	// get interpolated point 0 =< t =< 1, 0 = start, 1 = end
+	void Interpolate( float t, vec3_t &point, vec3_t &angle, float * fov );
+
+protected:
 	void BezierInterpolatePoint( float t, vec3_t &point );
 	void InterpolateAngle( float t, vec3_t &angle );
 

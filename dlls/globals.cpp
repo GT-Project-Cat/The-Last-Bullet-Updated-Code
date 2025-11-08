@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *	
 *	This product contains software technology licensed from Id 
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
@@ -35,5 +35,5 @@ DLL_GLOBAL Vector		g_vecAttackDir;
 DLL_GLOBAL int			g_iSkillLevel;
 DLL_GLOBAL int			gDisplayTitle;
 DLL_GLOBAL BOOL			g_fGameOver;
-DLL_GLOBAL const Vector	g_vecZero = Vector(0,0,0);
-DLL_GLOBAL int			g_Language;
+DLL_GLOBAL const Vector		g_vecZero = Vector( 0, 0, 0 );
+

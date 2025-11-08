@@ -16,7 +16,8 @@
 #define CON_NPRINTH
 #ifdef _WIN32
 #pragma once
-#endif
+#if !defined(CON_NPRINT_H)
+#define CON_NPRINT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -24,15 +25,9 @@ extern "C" {
 	
 typedef struct con_nprint_s
 {
-	int		index;			// Row #
+	int	index;		// Row #
 	float	time_to_live;	// # of seconds before it dissappears
-	float	color[ 3 ];		// RGB colors ( 0.0 -> 1.0 scale )
+	float	color[3];		// RGB colors ( 0.0 -> 1.0 scale )
 } con_nprint_t;
 
-void Con_NPrintf( int idx, char *fmt, ... );
-void Con_NXPrintf( struct con_nprint_s *info, char *fmt, ... );
-#ifdef __cplusplus
-}
-#endif
-
-#endif
+#endif//CON_NPRINT_H

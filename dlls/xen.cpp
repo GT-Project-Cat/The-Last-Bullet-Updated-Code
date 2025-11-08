@@ -39,7 +39,7 @@ private:
 	Activity	m_Activity;
 };
 
-TYPEDESCRIPTION	CActAnimating::m_SaveData[] = 
+TYPEDESCRIPTION	CActAnimating::m_SaveData[] =
 {
 	DEFINE_FIELD( CActAnimating, m_Activity, FIELD_INTEGER ),
 };
@@ -47,7 +47,7 @@ TYPEDESCRIPTION	CActAnimating::m_SaveData[] =
 IMPLEMENT_SAVERESTORE( CActAnimating, CBaseAnimating );
 
 void CActAnimating :: SetActivity( Activity act ) 
-{ 
+{
 	int sequence = LookupActivity( act ); 
 	if ( sequence != ACTIVITY_NOT_AVAILABLE )
 	{
@@ -82,7 +82,7 @@ private:
 
 LINK_ENTITY_TO_CLASS( xen_plantlight, CXenPLight );
 
-TYPEDESCRIPTION	CXenPLight::m_SaveData[] = 
+TYPEDESCRIPTION	CXenPLight::m_SaveData[] =
 {
 	DEFINE_FIELD( CXenPLight, m_pGlow, FIELD_CLASSPTR ),
 };
@@ -198,7 +198,7 @@ void CXenHair::Spawn( void )
 	SET_MODEL( edict(), "models/hair.mdl" );
 	UTIL_SetSize( pev, Vector(-4,-4,0), Vector(4,4,32));
 	pev->sequence = 0;
-	
+
 	if ( !(pev->spawnflags & SF_HAIR_SYNC) )
 	{
 		pev->frame = RANDOM_FLOAT(0,255);
@@ -283,7 +283,7 @@ private:
 
 LINK_ENTITY_TO_CLASS( xen_tree, CXenTree );
 
-TYPEDESCRIPTION	CXenTree::m_SaveData[] = 
+TYPEDESCRIPTION	CXenTree::m_SaveData[] =
 {
 	DEFINE_FIELD( CXenTree, m_pTrigger, FIELD_CLASSPTR ),
 };
@@ -314,14 +314,14 @@ void CXenTree :: Spawn( void )
 	UTIL_SetSize( m_pTrigger->pev, Vector( -24, -24, 0 ), Vector( 24, 24, 128 ) );
 }
 
-const char *CXenTree::pAttackHitSounds[] = 
+const char *CXenTree::pAttackHitSounds[] =
 {
 	"zombie/claw_strike1.wav",
 	"zombie/claw_strike2.wav",
 	"zombie/claw_strike3.wav",
 };
 
-const char *CXenTree::pAttackMissSounds[] = 
+const char *CXenTree::pAttackMissSounds[] =
 {
 	"zombie/claw_miss1.wav",
 	"zombie/claw_miss2.wav",
@@ -382,7 +382,7 @@ void CXenTree :: HandleAnimEvent( MonsterEvent_t *pEvent )
 					}
 				}
 			}
-					
+
 			if ( sound )
 			{
 				EMIT_SOUND_ARRAY_DYN( CHAN_WEAPON, pAttackHitSounds );
@@ -494,6 +494,7 @@ void CXenSporeSmall::Spawn( void )
 	CXenSpore::Spawn();
 	UTIL_SetSize( pev, Vector(-16,-16,0), Vector(16,16,64));
 }
+
 void CXenSporeMed::Spawn( void )
 {
 	pev->skin = 1;
@@ -503,7 +504,7 @@ void CXenSporeMed::Spawn( void )
 
 
 // I just eyeballed these -- fill in hulls for the legs
-const Vector CXenSporeLarge::m_hullSizes[] = 
+const Vector CXenSporeLarge::m_hullSizes[] =
 {
 	Vector( 90, -25, 0 ),
 	Vector( 25, 75, 0 ),
@@ -517,7 +518,7 @@ void CXenSporeLarge::Spawn( void )
 	pev->skin = 2;
 	CXenSpore::Spawn();
 	UTIL_SetSize( pev, Vector(-48,-48,110), Vector(48,48,240));
-	
+
 	Vector forward, right;
 
 	UTIL_MakeVectorsPrivate( pev->angles, forward, right, NULL );
@@ -544,7 +545,7 @@ void CXenSpore :: Spawn( void )
 	pev->nextthink = gpGlobals->time + RANDOM_FLOAT( 0.1, 0.4 );	// Load balance these a bit
 }
 
-const char *CXenSpore::pModelNames[] = 
+const char *CXenSpore::pModelNames[] =
 {
 	"models/fungus(small).mdl",
 	"models/fungus.mdl",

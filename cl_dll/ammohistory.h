@@ -15,6 +15,9 @@
 //
 // ammohistory.h
 //
+#pragma once
+#if !defined(AMMOHISTORY_H)
+#define AMMOHISTORY_H
 
 
 // this is the max number of items in each bucket
@@ -27,8 +30,8 @@ private:
 	WEAPON		rgWeapons[MAX_WEAPONS];	// Weapons Array
 
 	// counts of weapons * ammo
-	WEAPON*		rgSlots[MAX_WEAPON_SLOTS+1][MAX_WEAPON_POSITIONS+1];	// The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's NULL, no weapon is there
-	int			riAmmo[MAX_AMMO_TYPES];							// count of each ammo type
+	WEAPON*		rgSlots[MAX_WEAPON_SLOTS + 1][MAX_WEAPON_POSITIONS + 1];	// The slots currently in use by weapons.  The value is a pointer to the weapon;  if it's NULL, no weapon is there
+	int			riAmmo[MAX_AMMO_TYPES];					// count of each ammo type
 
 public:
 	void Init( void )
@@ -50,25 +53,25 @@ public:
 	WEAPON *GetWeapon( int iId ) { return &rgWeapons[iId]; }
 	void AddWeapon( WEAPON *wp ) 
 	{ 
-		rgWeapons[ wp->iId ] = *wp;	
-		LoadWeaponSprites( &rgWeapons[ wp->iId ] );
+		rgWeapons[wp->iId] = *wp;	
+		LoadWeaponSprites( &rgWeapons[wp->iId] );
 	}
 
 	void PickupWeapon( WEAPON *wp )
 	{
-		rgSlots[ wp->iSlot ][ wp->iSlotPos ] = wp;
+		rgSlots[wp->iSlot][wp->iSlotPos] = wp;
 	}
 
 	void DropWeapon( WEAPON *wp )
 	{
-		rgSlots[ wp->iSlot ][ wp->iSlotPos ] = NULL;
+		rgSlots[wp->iSlot][wp->iSlotPos] = NULL;
 	}
 
 	void DropAllWeapons( void )
 	{
-		for ( int i = 0; i < MAX_WEAPONS; i++ )
+		for( int i = 0; i < MAX_WEAPONS; i++ )
 		{
-			if ( rgWeapons[i].iId )
+			if( rgWeapons[i].iId )
 				DropWeapon( &rgWeapons[i] );
 		}
 	}
@@ -101,7 +104,7 @@ enum {
 	HISTSLOT_EMPTY,
 	HISTSLOT_AMMO,
 	HISTSLOT_WEAP,
-	HISTSLOT_ITEM,
+	HISTSLOT_ITEM
 };
 
 class HistoryResource
@@ -126,6 +129,7 @@ public:
 	void Reset( void )
 	{
 		memset( rgAmmoHistory, 0, sizeof rgAmmoHistory );
+		iCurrentHistorySlot = 0;
 	}
 
 	int iHistoryGap;
@@ -139,6 +143,4 @@ public:
 };
 
 extern HistoryResource gHR;
-
-
-
+#endif // AMMOHISTORY_H

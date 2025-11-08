@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *	
 *	This product contains software technology licensed from Id 
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
@@ -12,11 +12,29 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#ifndef FUNC_BREAK_H
+#pragma once
+#if !defined(FUNC_BREAK_H)
 #define FUNC_BREAK_H
 
-typedef enum { expRandom, expDirected} Explosions;
-typedef enum { matGlass = 0, matWood, matMetal, matFlesh, matCinderBlock, matCeilingTile, matComputer, matUnbreakableGlass, matRocks, matNone, matLastMaterial } Materials;
+typedef enum
+{
+	expRandom,
+	expDirected
+} Explosions;
+typedef enum
+{
+	matGlass = 0,
+	matWood,
+	matMetal,
+	matFlesh,
+	matCinderBlock,
+	matCeilingTile,
+	matComputer,
+	matUnbreakableGlass,
+	matRocks,
+	matNone,
+	matLastMaterial
+} Materials;
 
 #define	NUM_SHARDS 6 // this many shards spawned when breakable objects break;
 
@@ -32,23 +50,23 @@ public:
 	void DamageSound( void );
 
 	// breakables use an overridden takedamage
-	virtual int TakeDamage( entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType );
+	virtual int TakeDamage( entvars_t *pevInflictor, entvars_t *pevAttacker, float flDamage, int bitsDamageType );
 	// To spark when hit
 	void TraceAttack( entvars_t *pevAttacker, float flDamage, Vector vecDir, TraceResult *ptr, int bitsDamageType );
 
 	BOOL IsBreakable( void );
 	BOOL SparkWhenHit( void );
 
-	int	 DamageDecal( int bitsDamageType );
+	int DamageDecal( int bitsDamageType );
 
-	void EXPORT		Die( void );
-	virtual int		ObjectCaps( void ) { return (CBaseEntity :: ObjectCaps() & ~FCAP_ACROSS_TRANSITION); }
-	virtual int		Save( CSave &save );
-	virtual int		Restore( CRestore &restore );
+	void EXPORT Die( void );
+	virtual int ObjectCaps( void ) { return ( CBaseEntity::ObjectCaps() & ~FCAP_ACROSS_TRANSITION ); }
+	virtual int Save( CSave &save );
+	virtual int Restore( CRestore &restore );
 
-	inline BOOL		Explodable( void ) { return ExplosionMagnitude() > 0; }
-	inline int		ExplosionMagnitude( void ) { return pev->impulse; }
-	inline void		ExplosionSetMagnitude( int magnitude ) { pev->impulse = magnitude; }
+	inline BOOL Explodable( void ) { return ExplosionMagnitude() > 0; }
+	inline int ExplosionMagnitude( void ) { return pev->impulse; }
+	inline void ExplosionSetMagnitude( int magnitude ) { pev->impulse = magnitude; }
 
 	static void MaterialSoundPrecache( Materials precacheMaterial );
 	static void MaterialSoundRandom( edict_t *pEdict, Materials soundMaterial, float volume );
@@ -61,14 +79,13 @@ public:
 	static const char *pSoundsConcrete[];
 	static const char *pSpawnObjects[];
 
-	static	TYPEDESCRIPTION m_SaveData[];
+	static TYPEDESCRIPTION m_SaveData[];
 
-	Materials	m_Material;
-	Explosions	m_Explosion;
-	int			m_idShard;
-	float		m_angle;
-	int			m_iszGibModel;
-	int			m_iszSpawnObject;
+	Materials m_Material;
+	Explosions m_Explosion;
+	int m_idShard;
+	float m_angle;
+	string_t m_iszGibModel;
+	string_t m_iszSpawnObject;
 };
-
 #endif	// FUNC_BREAK_H

@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *	
 *	This product contains software technology licensed from Id 
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
@@ -12,41 +12,57 @@
 *   without written permission from Valve LLC.
 *
 ****/
-#include "archtypes.h"     // DAL
-
+#pragma once
+#if !defined(UTIL_H)
+#define UTIL_H
 //
 // Misc utility code
 //
-#ifndef ACTIVITY_H
+#if !defined(ACTIVITY_H)
 #include "activity.h"
 #endif
 
-#ifndef ENGINECALLBACK_H
+#if !defined(ENGINECALLBACK_H)
 #include "enginecallback.h"
 #endif
+
+#include <string.h>
+#include <ctype.h>
 inline void MESSAGE_BEGIN( int msg_dest, int msg_type, const float *pOrigin, entvars_t *ent );  // implementation later in this file
 
 extern globalvars_t				*gpGlobals;
 
 // Use this instead of ALLOC_STRING on constant strings
-#define STRING(offset)		((const char *)(gpGlobals->pStringBase + (unsigned int)(offset)))
-#define MAKE_STRING(str)	((uint64)(str) - (uint64)(STRING(0)))
+#define STRING(offset)		(const char *)(gpGlobals->pStringBase + (int)offset)
+
+#if !XASH_64BIT || CLIENT_DLL
+#define MAKE_STRING(str)	((int)(long int)str - (int)(long int)STRING(0))
+#else
+static inline int MAKE_STRING(const char *szValue)
+{
+	long long ptrdiff = szValue - STRING(0);
+	if( ptrdiff > INT_MAX || ptrdiff < INT_MIN )
+		return ALLOC_STRING( szValue );
+	else
+		return (int)ptrdiff;
+}
+#endif
 
 inline edict_t *FIND_ENTITY_BY_CLASSNAME(edict_t *entStart, const char *pszName) 
 {
 	return FIND_ENTITY_BY_STRING(entStart, "classname", pszName);
-}	
+}
 
 inline edict_t *FIND_ENTITY_BY_TARGETNAME(edict_t *entStart, const char *pszName) 
 {
 	return FIND_ENTITY_BY_STRING(entStart, "targetname", pszName);
-}	
+}
 
 // for doing a reverse lookup. Say you have a door, and want to find its button.
 inline edict_t *FIND_ENTITY_BY_TARGET(edict_t *entStart, const char *pszName) 
 {
 	return FIND_ENTITY_BY_STRING(entStart, "target", pszName);
-}	
+}
 
 // Keeps clutter down a bit, when writing key-value pairs
 #define WRITEKEY_INT(pf, szKeyName, iKeyValue) ENGINE_FPRINTF(pf, "\"%s\" \"%d\"\n", szKeyName, iKeyValue)
@@ -77,32 +93,27 @@ typedef int EOFFSET;
 typedef int BOOL;
 
 // In case this ever changes
+#if !defined(M_PI)
 #define M_PI			3.14159265358979323846
-
+#endif
 // Keeps clutter down a bit, when declaring external entity/global method prototypes
-#define DECLARE_GLOBAL_METHOD(MethodName)  extern void UTIL_DLLEXPORT MethodName( void )
-#define GLOBAL_METHOD(funcname)					void UTIL_DLLEXPORT funcname(void)
-
-#ifndef UTIL_DLLEXPORT
-#ifdef _WIN32
-#define UTIL_DLLEXPORT _declspec( dllexport )
-#else
-#define UTIL_DLLEXPORT __attribute__ ((visibility("default")))
-#endif
-#endif
+#define DECLARE_GLOBAL_METHOD(MethodName)  extern void DLLEXPORT MethodName( void )
+#define GLOBAL_METHOD(funcname)					void DLLEXPORT funcname(void)
 
 // This is the glue that hooks .MAP entity class names to our CPP classes
 // The _declspec forces them to be exported by name so we can do a lookup with GetProcAddress()
 // The function is used to intialize / allocate the object for the entity
-#define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName) \
-	extern "C" UTIL_DLLEXPORT void mapClassName( entvars_t *pev ); \
-	void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
 
+#if CLIENT_DLL
+#define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName)
+#else // CLIENT_DLL
+#define LINK_ENTITY_TO_CLASS(mapClassName,DLLClassName) extern "C" EXPORT void mapClassName( entvars_t *pev ); void mapClassName( entvars_t *pev ) { GetClassPtr( (DLLClassName *)pev ); }
+#endif // CLIENT_DLL
 
 //
 // Conversion among the three types of "entity", including identity-conversions.
 //
-#ifdef DEBUG
+#if DEBUG
 	extern edict_t *DBG_EntOfVars(const entvars_t *pev);
 	inline edict_t *ENT(const entvars_t *pev)	{ return DBG_EntOfVars(pev); }
 #else
@@ -127,7 +138,10 @@ inline EOFFSET OFFSET(entvars_t *pev)
 #endif
 	return OFFSET(ENT(pev)); 
 }
-inline entvars_t *VARS(entvars_t *pev)					{ return pev; }
+inline entvars_t *VARS(entvars_t *pev)
+{
+	return pev;
+}
 
 inline entvars_t *VARS(edict_t *pent)			
 { 
@@ -165,12 +179,11 @@ inline BOOL FStringNull(int iString)			{ return iString == iStringNull; }
 // All monsters need this data
 #define		DONT_BLEED			-1
 #define		BLOOD_COLOR_RED		(BYTE)247
-#define		BLOOD_COLOR_YELLOW	(BYTE)148//195
+#define		BLOOD_COLOR_YELLOW	(BYTE)195
 #define		BLOOD_COLOR_GREEN	BLOOD_COLOR_YELLOW
 
 typedef enum 
 {
-
 	MONSTERSTATE_NONE = 0,
 	MONSTERSTATE_IDLE,
 	MONSTERSTATE_COMBAT,
@@ -180,27 +193,34 @@ typedef enum
 	MONSTERSTATE_SCRIPT,
 	MONSTERSTATE_PLAYDEAD,
 	MONSTERSTATE_DEAD
-
 } MONSTERSTATE;
 
 
 
 // Things that toggle (buttons/triggers/doors) need this
 typedef enum
-	{
+{
 	TS_AT_TOP,
 	TS_AT_BOTTOM,
 	TS_GOING_UP,
 	TS_GOING_DOWN
-	} TOGGLE_STATE;
+} TOGGLE_STATE;
 
 // Misc useful
 inline BOOL FStrEq(const char*sz1, const char*sz2)
-	{ return (strcmp(sz1, sz2) == 0); }
+{
+	return (strcmp(sz1, sz2) == 0);
+}
+
 inline BOOL FClassnameIs(edict_t* pent, const char* szClassname)
-	{ return FStrEq(STRING(VARS(pent)->classname), szClassname); }
+{
+	return FStrEq(STRING(VARS(pent)->classname), szClassname);
+}
+
 inline BOOL FClassnameIs(entvars_t* pev, const char* szClassname)
-	{ return FStrEq(STRING(pev->classname), szClassname); }
+{
+	return FStrEq(STRING(pev->classname), szClassname);
+}
 
 class CBaseEntity;
 
@@ -247,11 +267,30 @@ extern void			UTIL_ShowMessageAll		( const char *pString );
 extern void			UTIL_ScreenFadeAll		( const Vector &color, float fadeTime, float holdTime, int alpha, int flags );
 extern void			UTIL_ScreenFade			( CBaseEntity *pEntity, const Vector &color, float fadeTime, float fadeHold, int alpha, int flags );
 
-typedef enum { ignore_monsters=1, dont_ignore_monsters=0, missile=2 } IGNORE_MONSTERS;
-typedef enum { ignore_glass=1, dont_ignore_glass=0 } IGNORE_GLASS;
+typedef enum
+{
+	ignore_monsters = 1,
+	dont_ignore_monsters = 0,
+	missile=2
+} IGNORE_MONSTERS;
+
+typedef enum
+{
+	ignore_glass = 1,
+	dont_ignore_glass = 0
+} IGNORE_GLASS;
+
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, edict_t *pentIgnore, TraceResult *ptr);
 extern void			UTIL_TraceLine			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, IGNORE_GLASS ignoreGlass, edict_t *pentIgnore, TraceResult *ptr);
-typedef enum { point_hull=0, human_hull=1, large_hull=2, head_hull=3 };
+
+enum
+{
+	point_hull = 0,
+	human_hull = 1,
+	large_hull = 2,
+	head_hull = 3
+};
+
 extern void			UTIL_TraceHull			(const Vector &vecStart, const Vector &vecEnd, IGNORE_MONSTERS igmon, int hullNumber, edict_t *pentIgnore, TraceResult *ptr);
 extern TraceResult	UTIL_GetGlobalTrace		(void);
 extern void			UTIL_TraceModel			(const Vector &vecStart, const Vector &vecEnd, int hullNumber, edict_t *pentModel, TraceResult *ptr);
@@ -276,7 +315,7 @@ extern float		UTIL_Approach( float target, float value, float speed );
 extern float		UTIL_ApproachAngle( float target, float value, float speed );
 extern float		UTIL_AngleDistance( float next, float cur );
 
-extern char			*UTIL_VarArgs( char *format, ... );
+extern char			*UTIL_VarArgs( const char *format, ... );
 extern void			UTIL_Remove( CBaseEntity *pEntity );
 extern BOOL			UTIL_IsValidEntity( edict_t *pent );
 extern BOOL			UTIL_TeamsMatch( const char *pTeamName1, const char *pTeamName2 );
@@ -294,6 +333,7 @@ extern void			UTIL_PrecacheOther( const char *szClassname );
 
 // prints a message to each client
 extern void			UTIL_ClientPrintAll( int msg_dest, const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL );
+
 inline void			UTIL_CenterPrintAll( const char *msg_name, const char *param1 = NULL, const char *param2 = NULL, const char *param3 = NULL, const char *param4 = NULL ) 
 {
 	UTIL_ClientPrintAll( HUD_PRINTCENTER, msg_name, param1, param2, param3, param4 );
@@ -309,7 +349,6 @@ extern void ClientPrint( entvars_t *client, int msg_dest, const char *msg_name, 
 // prints a message to the HUD say (chat)
 extern void			UTIL_SayText( const char *pText, CBaseEntity *pEntity );
 extern void			UTIL_SayTextAll( const char *pText, CBaseEntity *pEntity );
-
 
 typedef struct hudtextparms_s
 {
@@ -336,12 +375,12 @@ extern char *UTIL_dtos3( int d );
 extern char *UTIL_dtos4( int d );
 
 // Writes message to console with timestamp and FragLog header.
-extern void			UTIL_LogPrintf( char *fmt, ... );
+extern void			UTIL_LogPrintf( const char *fmt, ... );
 
 // Sorta like FInViewCone, but for nonmonsters. 
 extern float UTIL_DotPoints ( const Vector &vecSrc, const Vector &vecCheck, const Vector &vecDir );
 
-extern void UTIL_StripToken( const char *pKey, char *pDest );// for redundant keynames
+extern void UTIL_StripToken( const char *pKey, char *pDest, int nLen );// for redundant keynames
 
 // Misc functions
 extern void SetMovedir(entvars_t* pev);
@@ -351,7 +390,7 @@ extern int BuildChangeList( LEVELLIST *pLevelList, int maxList );
 //
 // How did I ever live without ASSERT?
 //
-#ifdef	DEBUG
+#if	DEBUG
 void DBG_AssertFunction(BOOL fExpr, const char* szExpr, const char* szFile, int szLine, const char* szMessage);
 #define ASSERT(f)		DBG_AssertFunction(f, #f, __FILE__, __LINE__, NULL)
 #define ASSERTSZ(f, sz)	DBG_AssertFunction(f, #f, __FILE__, __LINE__, sz)
@@ -360,20 +399,7 @@ void DBG_AssertFunction(BOOL fExpr, const char* szExpr, const char* szFile, int 
 #define ASSERTSZ(f, sz)
 #endif	// !DEBUG
 
-
 extern DLL_GLOBAL const Vector g_vecZero;
-
-//
-// Constants that were used only by QC (maybe not used at all now)
-//
-// Un-comment only as needed
-//
-#define LANGUAGE_ENGLISH				0
-#define LANGUAGE_GERMAN					1
-#define LANGUAGE_FRENCH					2
-#define LANGUAGE_BRITISH				3
-
-extern DLL_GLOBAL int			g_Language;
 
 #define AMBIENT_SOUND_STATIC			0	// medium radius attenuation
 #define AMBIENT_SOUND_EVERYWHERE		1
@@ -403,7 +429,6 @@ extern DLL_GLOBAL int			g_Language;
 #define SF_PENDULUM_AUTO_RETURN		16
 #define	SF_PENDULUM_PASSABLE		32
 
-
 #define SF_BRUSH_ROTATE_SMALLRADIUS	128
 #define SF_BRUSH_ROTATE_MEDIUMRADIUS 256
 #define SF_BRUSH_ROTATE_LARGERADIUS 512
@@ -429,8 +454,6 @@ extern DLL_GLOBAL int			g_Language;
 #define SVC_WEAPONANIM		35
 #define SVC_ROOMTYPE		37
 #define	SVC_DIRECTOR		51
-
-
 
 // triggers
 #define	SF_TRIGGER_ALLOWMONSTERS	1// monsters allowed to fire this trigger
@@ -459,13 +482,16 @@ extern DLL_GLOBAL int			g_Language;
 
 #define SF_TRIG_PUSH_ONCE		1
 
-
 // Sound Utilities
 
 // sentence groups
 #define CBSENTENCENAME_MAX 16
-#define CVOXFILESENTENCEMAX		1536		// max number of sentences in game. NOTE: this must match
-											// CVOXFILESENTENCEMAX in engine\sound.h!!!
+
+#define CVOXFILESENTENCEMAX_GOLDSOURCE_LEGACY 1536
+#define CVOXFILESENTENCEMAX_GOLDSOURCE_ANNIVERSARY_25 2048
+#define CVOXFILESENTENCEMAX_XASH3D 4096
+#define CVOXFILESENTENCEMAX CVOXFILESENTENCEMAX_XASH3D // max number of sentences in game. NOTE: this must match
+							// CVOXFILESENTENCEMAX in engine\sound.h!!!
 
 extern char gszallsentencenames[CVOXFILESENTENCEMAX][CBSENTENCENAME_MAX];
 extern int gcallsentences;
@@ -510,17 +536,16 @@ void EMIT_SOUND_SUIT(edict_t *entity, const char *sample);
 void EMIT_GROUPID_SUIT(edict_t *entity, int isentenceg);
 void EMIT_GROUPNAME_SUIT(edict_t *entity, const char *groupname);
 
-
 #define PRECACHE_SOUND_ARRAY( a ) \
-	{ for (int i = 0; i < ARRAYSIZE( a ); i++ ) PRECACHE_SOUND((char *) a [i]); }
+	{ for (int i = 0; i < (int)ARRAYSIZE( a ); i++ ) PRECACHE_SOUND( a[i] ); }
 
 #define EMIT_SOUND_ARRAY_DYN( chan, array ) \
 	EMIT_SOUND_DYN ( ENT(pev), chan , array [ RANDOM_LONG(0,ARRAYSIZE( array )-1) ], 1.0, ATTN_NORM, 0, RANDOM_LONG(95,105) ); 
 
 #define RANDOM_SOUND_ARRAY( array ) (array) [ RANDOM_LONG(0,ARRAYSIZE( (array) )-1) ]
 
-#define PLAYBACK_EVENT( flags, who, index ) PLAYBACK_EVENT_FULL( flags, who, index, 0, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
-#define PLAYBACK_EVENT_DELAY( flags, who, index, delay ) PLAYBACK_EVENT_FULL( flags, who, index, delay, (float *)&g_vecZero, (float *)&g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
+#define PLAYBACK_EVENT( flags, who, index ) PLAYBACK_EVENT_FULL( flags, who, index, 0, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
+#define PLAYBACK_EVENT_DELAY( flags, who, index, delay ) PLAYBACK_EVENT_FULL( flags, who, index, delay, g_vecZero, g_vecZero, 0.0, 0.0, 0, 0, 0, 0 );
 
 #define GROUP_OP_AND	0
 #define GROUP_OP_NAND	1
@@ -545,6 +570,4 @@ int UTIL_SharedRandomLong( unsigned int seed, int low, int high );
 float UTIL_SharedRandomFloat( unsigned int seed, float low, float high );
 
 float UTIL_WeaponTimeBase( void );
-
-
-//void ImpactBullet(TraceResult* ptr, Vector vecSrc, Vector vecEnd);
+#endif // UTIL_H

@@ -1,4 +1,4 @@
-//========= Copyright © 1996-2002, Valve LLC, All rights reserved. ============
+//========= Copyright (c) 1996-2002, Valve LLC, All rights reserved. ============
 //
 // Purpose: 
 //
@@ -6,6 +6,7 @@
 //=============================================================================
 
 // com_model.h
+#pragma once
 #if !defined( COM_MODEL_H )
 #define COM_MODEL_H
 #if defined( _WIN32 )
@@ -49,7 +50,7 @@ typedef enum
 } modtype_t;
 
 // must match definition in modelgen.h
-#ifndef SYNCTYPE_T
+#if !defined(SYNCTYPE_T)
 #define SYNCTYPE_T
 
 typedef enum
@@ -348,4 +349,5 @@ typedef struct player_info_s
 	customization_t customdata;
 } player_info_t;
 
-#endif // #define COM_MODEL_H
+#endif // COM_MODEL_H
+

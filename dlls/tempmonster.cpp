@@ -1,6 +1,6 @@
 /***
 *
-*	Copyright (c) 1996-2001, Valve LLC. All rights reserved.
+*	Copyright (c) 1996-2002, Valve LLC. All rights reserved.
 *	
 *	This product contains software technology licensed from Id 
 *	Software, Inc. ("Id Technology").  Id Technology (c) 1996 Id Software, Inc. 
@@ -36,7 +36,8 @@ public:
 	int  Classify ( void );
 	void HandleAnimEvent( MonsterEvent_t *pEvent );
 };
-LINK_ENTITY_TO_CLASS( my_monster, CMyMonster );
+
+LINK_ENTITY_TO_CLASS( my_monster, CMyMonster )
 
 //=========================================================
 // Classify - indicates this monster's place in the 
@@ -109,9 +110,9 @@ void CMyMonster :: Precache()
 	PRECACHE_SOUND("mysound.wav");
 
 	PRECACHE_MODEL("models/mymodel.mdl");
-}	
+}
 
 //=========================================================
 // AI Schedules Specific to this monster
 //=========================================================
-#endif 0
+#endif //0

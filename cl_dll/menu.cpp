@@ -17,6 +17,7 @@
 //
 // generic menu handler
 //
+
 #include "hud.h"
 #include "cl_util.h"
 #include "parsemsg.h"
@@ -24,7 +25,9 @@
 #include <string.h>
 #include <stdio.h>
 
+#if USE_VGUI
 #include "vgui_TeamFortressViewport.h"
+#endif
 
 #define MAX_MENU_STRING	512
 char g_szMenuString[MAX_MENU_STRING];
@@ -32,9 +35,9 @@ char g_szPrelocalisedMenuString[MAX_MENU_STRING];
 
 int KB_ConvertString( char *in, char **ppout );
 
-DECLARE_MESSAGE( m_Menu, ShowMenu );
+DECLARE_MESSAGE( m_Menu, ShowMenu )
 
-int CHudMenu :: Init( void )
+int CHudMenu::Init( void )
 {
 	gHUD.AddHudElem( this );
 
@@ -45,26 +48,27 @@ int CHudMenu :: Init( void )
 	return 1;
 }
 
-void CHudMenu :: InitHUDData( void )
+void CHudMenu::InitHUDData( void )
 {
 	m_fMenuDisplayed = 0;
 	m_bitsValidSlots = 0;
+	m_iFlags &= ~HUD_ACTIVE;
 	Reset();
 }
 
-void CHudMenu :: Reset( void )
+void CHudMenu::Reset( void )
 {
 	g_szPrelocalisedMenuString[0] = 0;
 	m_fWaitingForMore = FALSE;
 }
 
-int CHudMenu :: VidInit( void )
+int CHudMenu::VidInit( void )
 {
 	return 1;
 }
 
-
-/*=================================
+/*
+=================================
   ParseEscapeToken
 
   Interprets the given escape token (backslash followed by a letter). The
@@ -76,18 +80,19 @@ int CHudMenu :: VidInit( void )
    \y : Yellow text
    \r : Red text
    \R : Right-align (just for the remainder of the current line)
-=================================*/
+=================================
+*/
 
 static int menu_r, menu_g, menu_b, menu_x, menu_ralign;
 
 static inline const char* ParseEscapeToken( const char* token )
 {
-	if ( *token != '\\' )
+	if( *token != '\\' )
 		return token;
 
 	token++;
 
-	switch ( *token )
+	switch( *token )
 	{
 	case '\0':
 		return token;
@@ -117,7 +122,7 @@ static inline const char* ParseEscapeToken( const char* token )
 		break;
 
 	case 'R':
-		menu_x = ScreenWidth/2;
+		menu_x = ScreenWidth / 2;
 		menu_ralign = TRUE;
 		break;
 	}
@@ -125,14 +130,18 @@ static inline const char* ParseEscapeToken( const char* token )
 	return ++token;
 }
 
+int CHudMenu::Draw( float flTime )
+{
+	int i;
 
 int CHudMenu :: Draw( float flTime )
 {
 	// check for if menu is set to disappear
-	if ( m_flShutoffTime > 0 )
+	if( m_flShutoffTime > 0 )
 	{
-		if ( m_flShutoffTime <= gHUD.m_flTime )
-		{  // times up, shutoff
+		if( m_flShutoffTime <= gHUD.m_flTime )
+		{
+			// times up, shutoff
 			m_fMenuDisplayed = 0;
 			m_iFlags &= ~HUD_ACTIVE;
 			return 1;
@@ -140,82 +149,79 @@ int CHudMenu :: Draw( float flTime )
 	}
 
 	// don't draw the menu if the scoreboard is being shown
-	if ( gViewPort && gViewPort->IsScoreBoardVisible() )
+#if USE_VGUI
+	if( gViewPort && gViewPort->IsScoreBoardVisible() )
 		return 1;
+#endif
+
+	SCREENINFO screenInfo;
+
+	screenInfo.iSize = sizeof( SCREENINFO );
+	gEngfuncs.pfnGetScreenInfo( &screenInfo );
 
 	// draw the menu, along the left-hand side of the screen
 
 	// count the number of newlines
 	int nlc = 0;
-	int i;
-	for ( i = 0; i < MAX_MENU_STRING && g_szMenuString[i] != '\0'; i++ )
-	{
-		if ( g_szMenuString[i] == '\n' )
+	for( i = 0; i < MAX_MENU_STRING && g_szMenuString[i] != '\0'; i++ )
+		if( g_szMenuString[i] == '\n' )
 			nlc++;
-	}
+
+	int nFontHeight = Q_max( 12, screenInfo.iCharHeight );
 
 	// center it
-	int y = (ScreenHeight/2) - ((nlc/2)*12) - 40; // make sure it is above the say text
+	int y = ( ScreenHeight / 2 ) - (( nlc / 2 )* nFontHeight ) - ( 3 * nFontHeight + nFontHeight / 3 ); // make sure it is above the say text
 
 	menu_r		= 255;
 	menu_g		= 255;
 	menu_b		= 255;
 	menu_x		= 20;
-	menu_ralign	 = FALSE;
+	menu_ralign	= FALSE;
 
 	const char* sptr = g_szMenuString;
-	
-	while ( *sptr != '\0' )
+
+	while( *sptr != '\0' )
 	{
-		if ( *sptr == '\\' )
-		{
+		if( *sptr == '\\' )
 			sptr = ParseEscapeToken( sptr );
-		}
-		else if ( *sptr == '\n' )
+		else if( *sptr == '\n' )
 		{
-			menu_ralign	 = FALSE;
-			menu_x		 = 20;
-			y			+= (12);
-			
+			menu_ralign	= FALSE;
+			menu_x 		= 20;
+			y += nFontHeight;
 			sptr++;
 		}
 		else
 		{
-			char menubuf[ 80 ];
+			char menubuf[80] = "";
 			const char *ptr = sptr;
-			while ( *sptr != '\0' && *sptr != '\n' && *sptr != '\\')
-			{
+			while( *sptr != '\0' && *sptr != '\n' && *sptr != '\\' )
 				sptr++;
-			}
-
-			strncpy(menubuf, ptr, V_min((sptr - ptr), (int)sizeof(menubuf)));
-
-			menubuf[V_min( ( sptr - ptr), (int)(sizeof( menubuf )-1) ) ] = '\0';
-		
-			if ( menu_ralign )
-			{		
+			strlcpy( menubuf, ptr, Q_min(( sptr - ptr + 1 ), (int)sizeof( menubuf )));
+			if( menu_ralign )
 				// IMPORTANT: Right-to-left rendered text does not parse escape tokens!
 				menu_x = gHUD.DrawHudStringReverse( menu_x, y, 0, menubuf, menu_r, menu_g, menu_b );
-			}
+			else menu_x = gHUD.DrawHudString( menu_x, y, 320, menubuf, menu_r, menu_g, menu_b );
+		}
 			else
 			{
 				menu_x = gHUD.DrawHudString( menu_x, y, 320, menubuf, menu_r, menu_g, menu_b );
-			}
+	}
 		}
 	}
-	
+
 	return 1;
 }
 
 // selects an item from the menu
-void CHudMenu :: SelectMenuItem( int menu_item )
+void CHudMenu::SelectMenuItem( int menu_item )
 {
 	// if menu_item is in a valid slot,  send a menuselect command to the server
-	if ( (menu_item > 0) && (m_bitsValidSlots & (1 << (menu_item-1))) )
+	if( ( menu_item > 0 ) && ( m_bitsValidSlots & ( 1 << ( menu_item - 1 ) ) ) )
 	{
 		char szbuf[32];
 		sprintf( szbuf, "menuselect %d\n", menu_item );
-		EngineClientCmd( szbuf );
+		ClientCmd( szbuf );
 
 		// remove the menu
 		m_fMenuDisplayed = 0;
@@ -231,7 +237,7 @@ void CHudMenu :: SelectMenuItem( int menu_item )
 //		byte : a boolean, TRUE if there is more string yet to be received before displaying the menu, FALSE if it's the last string
 //		string: menu string to display
 // if this message is never received, then scores will simply be the combined totals of the players.
-int CHudMenu :: MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf )
+int CHudMenu::MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf )
 {
 	char *temp = NULL;
 
@@ -241,31 +247,33 @@ int CHudMenu :: MsgFunc_ShowMenu( const char *pszName, int iSize, void *pbuf )
 	int DisplayTime = READ_CHAR();
 	int NeedMore = READ_BYTE();
 
-	if ( DisplayTime > 0 )
+	if( DisplayTime > 0 )
 		m_flShutoffTime = DisplayTime + gHUD.m_flTime;
 	else
 		m_flShutoffTime = -1;
 
-	if ( m_bitsValidSlots )
+	if( m_bitsValidSlots )
 	{
-		if ( !m_fWaitingForMore ) // this is the start of a new menu
+		if( !m_fWaitingForMore ) // this is the start of a new menu
 		{
-			strncpy( g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING );
+			strlcpy( g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING );
 		}
 		else
-		{  // append to the current menu string
-			strncat( g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING - strlen(g_szPrelocalisedMenuString) );
+		{
+			// append to the current menu string
+			strlcat( g_szPrelocalisedMenuString, READ_STRING(), MAX_MENU_STRING );
 		}
 		g_szPrelocalisedMenuString[MAX_MENU_STRING-1] = 0;  // ensure null termination (strncat/strncpy does not)
 
-		if ( !NeedMore )
-		{  // we have the whole string, so we can localise it now
-			strcpy( g_szMenuString, gHUD.m_TextMessage.BufferedLocaliseTextString( g_szPrelocalisedMenuString ) );
+		if( !NeedMore )
+		{
+			// we have the whole string, so we can localise it now
+			strlcpy( g_szMenuString, gHUD.m_TextMessage.BufferedLocaliseTextString( g_szPrelocalisedMenuString ), MAX_MENU_STRING );
 
 			// Swap in characters
-			if ( KB_ConvertString( g_szMenuString, &temp ) )
+			if( KB_ConvertString( g_szMenuString, &temp ) )
 			{
-				strcpy( g_szMenuString, temp );
+				strlcpy( g_szMenuString, temp, MAX_MENU_STRING );
 				free( temp );
 			}
 		}

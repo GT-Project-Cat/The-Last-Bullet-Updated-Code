@@ -12,6 +12,7 @@
 *   without written permission from Valve LLC.
 *
 ****/
+
 #include "../hud.h"
 #include "../cl_util.h"
 #include "event_api.h"
@@ -52,6 +53,7 @@ void EV_MariaFire(struct event_args_s* args);
 void EV_PlasmaFire(struct event_args_s* args);
 
 void EV_TrainPitchAdjust( struct event_args_s *args );
+void EV_VehiclePitchAdjust( event_args_t *args );
 }
 
 /*
@@ -100,5 +102,5 @@ void Game_HookEvents( void )
 	gEngfuncs.pfnHookEvent("events/teterev.sc", EV_TeterevFire);
 	gEngfuncs.pfnHookEvent("events/maria.sc", EV_MariaFire);
 	gEngfuncs.pfnHookEvent("events/plasmarifle.sc", EV_PlasmaFire);
-
+	gEngfuncs.pfnHookEvent("events/vehicle.sc", EV_VehiclePitchAdjust);
 }
