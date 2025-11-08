@@ -5,12 +5,12 @@
     <application
         android:forceQueryable="true"
         android:icon="@android:mipmap/sym_def_app_icon"
-        android:label="hlsdk-portable"
+        android:label="the-last-bullet"
         tools:targetApi="r">
 
         <meta-data
             android:name="su.xash.engine.gamedir"
-            android:value="valve" />
+            android:value="TLBUE" />
 
         <activity
             android:name="su.xash.hlsdk.MainActivity"
