@@ -4,12 +4,14 @@
 #include <stdio.h>
 #include "parsemsg.h"
 #include "hud_servers.h"
+#if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
-
+#include "vgui_ScorePanel.h"
+#endif
 #include "demo.h"
 #include "demo_api.h"
-#include "vgui_ScorePanel.h"
+
 
 DECLARE_MESSAGE(m_Use, ShowUseHud)
 

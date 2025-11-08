@@ -120,7 +120,6 @@ void ClientDisconnect( edict_t *pEntity )
 	{
 		pSound->Reset();
 	}
-	}
 
 	// since the edict doesn't get deleted, fix it so it doesn't interfere.
 	pEntity->v.takedamage = DAMAGE_NO;// don't attract autoaim

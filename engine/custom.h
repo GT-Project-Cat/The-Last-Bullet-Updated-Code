@@ -15,9 +15,6 @@
 #pragma once
 #if !defined(CUSTOM_H)
 #define CUSTOM_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 #include "const.h"
 
@@ -39,7 +36,6 @@ typedef enum
 	t_world			// Fake type for world, is really t_model
 } resourcetype_t;
 
-
 typedef struct
 {
 	int		size;
@@ -58,8 +54,6 @@ typedef struct resourceinfo_s
 #define RES_PRECACHED	(1<<4)	// Already precached
 #define RES_ALWAYS		(1<<5)	// Download always even if available on client
 #define RES_CHECKFILE	(1<<7)	// Check file on client
-
-#include "crc.h"
 
 typedef struct resource_s
 {

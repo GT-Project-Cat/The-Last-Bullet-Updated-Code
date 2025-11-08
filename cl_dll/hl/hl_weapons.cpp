@@ -108,11 +108,10 @@ bool bIsMultiplayer( void )
 }
 
 //Just loads a v_ model.
-void LoadVModel( const char *szViewModel, CBasePlayer *m_pPlayer )
+void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer)
 {
-	gEngfuncs.CL_LoadModel( szViewModel, &m_pPlayer->pev->viewmodel );
+	gEngfuncs.CL_LoadModel(szViewModel, &m_pPlayer->pev->viewmodel);
 }
-
 /*
 =====================
 HUD_PrepEntity

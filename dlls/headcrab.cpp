@@ -110,8 +110,6 @@ public:
 };
 LINK_ENTITY_TO_CLASS( monster_headcrab, CHeadCrab );
 
-LINK_ENTITY_TO_CLASS( monster_headcrab, CHeadCrab )
-
 DEFINE_CUSTOM_SCHEDULES( CHeadCrab )
 {
 	slHCRangeAttack1,
@@ -543,8 +541,6 @@ public:
 	virtual float GetSoundVolue( void ) { return 0.8f; }
 };
 LINK_ENTITY_TO_CLASS( monster_babycrab, CBabyCrab );
-
-LINK_ENTITY_TO_CLASS( monster_babycrab, CBabyCrab )
 
 void CBabyCrab::Spawn( void )
 {

@@ -27,11 +27,12 @@
 #if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
+#include "vgui_ScorePanel.h"
 #endif
 
 #include "demo.h"
 #include "demo_api.h"
-#include "vgui_ScorePanel.h"
+
 
 hud_player_info_t	 g_PlayerInfoList[MAX_PLAYERS+1];	   // player info from the engine
 extra_player_info_t  g_PlayerExtraInfo[MAX_PLAYERS+1];   // additional player info sent directly to the client dll
@@ -140,17 +141,6 @@ int __MsgFunc_GameMode( const char *pszName, int iSize, void *pbuf )
 {
 	return gHUD.MsgFunc_GameMode( pszName, iSize, pbuf );
 }
-int __MsgFunc_WaterSplash(const char* pszName, int iSize, void* pbuf)
-{
-	gHUD.MsgFunc_WaterSplash(pszName, iSize, pbuf);
-	return 1;
-}
-
-int __MsgFunc_Impact(const char* pszName, int iSize, void* pbuf)
-{
-	gHUD.MsgFunc_Impact(pszName, iSize, pbuf);
-	return 1;
-}
 
 
 // TFFree Command Menu
@@ -197,10 +187,12 @@ void __CmdFunc_ForceCloseCommandMenu( void )
 
 void __CmdFunc_ToggleServerBrowser( void )
 {
+#if USE_VGUI
 	if ( gViewPort )
 	{
 		gViewPort->ToggleServerBrowser();
 	}
+#endif
 }
 
 // TFFree Command Menu Message Handlers
@@ -346,9 +338,6 @@ int __MsgFunc_AllowSpec( const char *pszName, int iSize, void *pbuf )
 // This is called every time the DLL is loaded
 void CHud::Init( void )
 {
-	
-	cl_rollangle = gEngfuncs.pfnRegisterVariable("cl_rollangle", "0.65", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
-	cl_rollspeed = gEngfuncs.pfnRegisterVariable("cl_rollspeed", "300", FCVAR_CLIENTDLL | FCVAR_ARCHIVE);
 	//RainInfo = gEngfuncs.pfnRegisterVariable("cl_raininfo", "0", 0);	// rain tutorial
 
 	HOOK_MESSAGE( Logo );
@@ -386,14 +375,13 @@ void CHud::Init( void )
 
 	HOOK_MESSAGE( Spectator );
 	HOOK_MESSAGE( AllowSpec );
-	HOOK_MESSAGE(WaterSplash);
 
 #if USE_VGUI
 	HOOK_MESSAGE( SpecFade );
 	HOOK_MESSAGE( ResetFade );
 #endif
 
-	HOOK_MESSAGE(Impact);
+	
 
 
 	// VGUI Menus
@@ -487,8 +475,6 @@ CHud::~CHud()
 		}
 		m_pHudList = NULL;
 	}
-
-	ServersShutdown();
 }
 
 // GetSpriteIndex()

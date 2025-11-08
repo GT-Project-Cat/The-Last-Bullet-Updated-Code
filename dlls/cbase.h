@@ -139,6 +139,15 @@ public:
 	CBaseEntity *operator ->();
 };
 
+enum GrappleTarget
+{
+	GRAPPLE_NOT_A_TARGET = 0,
+	GRAPPLE_SMALL = 1,
+	GRAPPLE_MEDIUM = 2,
+	GRAPPLE_LARGE = 3,
+	GRAPPLE_FIXED = 4,
+};
+
 //
 // Base Entity.  All entity types derive from this
 //
@@ -343,8 +352,11 @@ public:
 	virtual	BOOL FVisible( CBaseEntity *pEntity );
 	virtual	BOOL FVisible( const Vector &vecOrigin );
 
+	void FireBulletsWater(Vector vecSrc, Vector vecEnd);
+
 	//We use this variables to store each ammo count.
 	int ammo_9mm;
+	int ammo_mp5;
 	int ammo_357;
 	int ammo_bolts;
 	int ammo_buckshot;
@@ -352,6 +364,13 @@ public:
 	int ammo_uranium;
 	int ammo_hornets;
 	int ammo_argrens;
+	int ammo_338;
+	int ammo_mp44;
+	int ammo_wrifle;
+	int ammo_ppsh;
+	int ammo_tommy;
+	int ammo_pm;
+	int ammo_plasmo;
 	//Special stuff for grenades and satchels.
 	float m_flStartThrow;
 	float m_flReleaseThrow;

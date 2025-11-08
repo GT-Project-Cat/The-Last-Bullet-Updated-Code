@@ -25,7 +25,6 @@
 #include <stdio.h>
 #include "custom.h"
 #include "cvardef.h"
-#include "Sequence.h"
 //
 // Defines entity interface between engine and DLLs.
 // This header file included by engine files and DLL files.
@@ -34,14 +33,6 @@
 //		include progdefs.h
 // This is conveniently done for them in extdll.h
 //
-
-/*
-#ifdef _WIN32
-#define DLLEXPORT __stdcall
-#else
-#define DLLEXPORT  __attribute__ ((visibility("default")))
-#endif
-*/
 
 typedef enum
 {
@@ -94,13 +85,11 @@ typedef struct
 	int	fEnabled;
 	int	fPlayLooping;
 	float	cdvolume;
-	//BYTE 	remap[100];
 	int	fCDRom;
 	int	fPlayTrack;
 } CDStatus;
 		
 typedef unsigned int	CRC32_t;
-
 
 // Engine hands this to DLLs for functionality callbacks
 typedef struct enginefuncs_s
@@ -283,8 +272,6 @@ typedef struct enginefuncs_s
 	// added in 8279
 	edict_t* (*pfnPEntityOfEntIndexAllEntities)( int iEntIndex );
 } enginefuncs_t;
-
-
 // ONLY ADD NEW FUNCTIONS TO THE END OF THIS STRUCT.  INTERFACE VERSION IS FROZEN AT 138
 	
 // Passed to pfnKeyValue
@@ -304,7 +291,6 @@ typedef struct
 	edict_t	*pentLandmark;
 	vec3_t	vecLandmarkOrigin;
 } LEVELLIST;
-#define MAX_LEVEL_CONNECTIONS	16		// These are encoded in the lower 16bits of ENTITYTABLE->flags
 
 typedef struct 
 {

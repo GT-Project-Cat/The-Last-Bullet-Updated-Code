@@ -15,9 +15,6 @@
 #pragma once
 #if !defined(PROGDEFS_H)
 #define PROGDEFS_H
-#ifdef _WIN32
-#pragma once
-#endif
 
 typedef struct
 {	
@@ -54,7 +51,6 @@ typedef struct
 	void		*pSaveData;	// (SAVERESTOREDATA *) pointer
 	vec3_t		vecLandmarkOffset;
 } globalvars_t;
-
 
 typedef struct entvars_s
 {
@@ -107,7 +103,6 @@ typedef struct entvars_s
 	int		skin;
 	int		body;		// sub-model selection for studiomodels
 	int 		effects;
-	
 	float		gravity;		// % of "normal" gravity
 	float		friction;		// inverse elasticity of MOVETYPE_BOUNCE
 

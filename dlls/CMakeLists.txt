@@ -149,6 +149,29 @@ set (SVDLL_SOURCES
 	../pm_shared/pm_math.c
 	../pm_shared/pm_shared.c
 	../public/safe_snprintf.c
+	BonusWhiskey.cpp
+	Colt_Maria.cpp
+	EnergoGun.cpp
+	ExampleGun.cpp
+	K43_Rifle.cpp
+	Knife.cpp
+	MP44.cpp
+	plasmagun.cpp
+	plasmarifle.cpp
+	plasmarifle_weapon.h
+	ppsh_weapons.cpp
+	rifle.cpp
+	Sten.cpp
+	teterev.cpp
+	TommyGun.cpp
+	venom.cpp
+	DrinkMed.cpp
+	EeatHelthyKit.cpp
+	plasma.cpp
+	plasma.h
+	healtypacket.cpp
+	fgrunt.cpp
+	mutant_blade.cpp
 )
 
 if (HAVE_STRLCPY)

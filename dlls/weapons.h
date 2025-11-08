@@ -225,6 +225,7 @@ typedef	enum
 #define ITEM_FLAG_NOAUTOSWITCHEMPTY	4
 #define ITEM_FLAG_LIMITINWORLD		8
 #define ITEM_FLAG_EXHAUSTIBLE		16 // A player can totally exhaust their ammo supply and lose this weapon
+#define ITEM_FLAG_NOAUTOSWITCHTO    32
 
 #define WEAPON_IS_ONTARGET 0x40
 
@@ -362,7 +363,7 @@ public:
 
 	virtual BOOL CanDeploy( void );
 	virtual BOOL IsUseable( void );
-	BOOL DefaultDeploy( char *szViewModel, char *szWeaponModel, int iAnim, char *szAnimExt, int skiplocal = 0, int body = 0 );
+	BOOL DefaultDeploy(const char* szViewModel, const char* szWeaponModel, int iAnim, const char* szAnimExt, int skiplocal = 0, int body = 0);
 	int DefaultReload( int iClipSize, int iAnim, float fDelay, int body = 0 );
 
 	virtual void ItemPostFrame( void );	// called each frame by the player PostThink
@@ -490,27 +491,27 @@ extern MULTIDAMAGE gMultiDamage;
 //=========================================================
 class CWeaponBox : public CBaseEntity
 {
-	void Precache( void );
-	void Spawn( void );
-	void Touch( CBaseEntity *pOther );
-	void KeyValue( KeyValueData *pkvd );
-	BOOL IsEmpty( void );
-	int  GiveAmmo( int iCount, char *szName, int iMax, int *pIndex = NULL );
-	void SetObjectCollisionBox( void );
+	void Precache(void);
+	void Spawn(void);
+	void Touch(CBaseEntity* pOther);
+	void KeyValue(KeyValueData* pkvd);
+	BOOL IsEmpty(void);
+	int  GiveAmmo(int iCount, const char* szName, int iMax, int* pIndex = NULL);
+	void SetObjectCollisionBox(void);
 
 public:
-	void EXPORT Kill ( void );
-	int		Save( CSave &save );
-	int		Restore( CRestore &restore );
+	void EXPORT Kill(void);
+	int		Save(CSave& save);
+	int		Restore(CRestore& restore);
 	static	TYPEDESCRIPTION m_SaveData[];
 
-	BOOL HasWeapon( CBasePlayerItem *pCheckItem );
-	BOOL PackWeapon( CBasePlayerItem *pWeapon );
-	BOOL PackAmmo( int iszName, int iCount );
-	
-	CBasePlayerItem	*m_rgpPlayerItems[MAX_ITEM_TYPES];// one slot for each 
+	BOOL HasWeapon(CBasePlayerItem* pCheckItem);
+	BOOL PackWeapon(CBasePlayerItem* pWeapon);
+	BOOL PackAmmo(int iszName, int iCount);
 
-	int m_rgiszAmmo[MAX_AMMO_SLOTS];// ammo names
+	CBasePlayerItem* m_rgpPlayerItems[MAX_ITEM_TYPES];// one slot for each 
+
+	string_t m_rgiszAmmo[MAX_AMMO_SLOTS];// ammo names
 	int	m_rgAmmo[MAX_AMMO_SLOTS];// ammo quantities
 
 	int m_cAmmoTypes;// how many ammo types packed into this box (if packed by a level designer)
@@ -518,7 +519,7 @@ public:
 
 #ifdef CLIENT_DLL
 bool bIsMultiplayer ( void );
-void LoadVModel ( char *szViewModel, CBasePlayer *m_pPlayer );
+void LoadVModel(const char* szViewModel, CBasePlayer* m_pPlayer);
 #endif
 
 class CGlock : public CBasePlayerWeapon
@@ -528,9 +529,9 @@ public:
 	void Precache( void );
 	int iItemSlot( void ) { return 2; }
 	int GetItemInfo(ItemInfo *p);
-
+	int AddToPlayer(CBasePlayer* pPlayer);
 	void PrimaryAttack( void );
-	//void SecondaryAttack( void );
+	void SecondaryAttack( void );
 	void GlockFire( float flSpread, float flCycleTime, BOOL fUseAutoAim );
 	BOOL Deploy( void );
 	void Reload( void );
@@ -670,7 +671,7 @@ public:
 	void EXPORT SwingAgain( void );
 	void EXPORT Smack( void );
 	int GetItemInfo(ItemInfo *p);
-
+	int AddToPlayer(CBasePlayer* pPlayer);
 	void PrimaryAttack( void );
 	int Swing( int fFirst );
 	BOOL Deploy( void );
@@ -704,6 +705,7 @@ public:
 	void Holster( int skiplocal = 0 );
 	void Reload( void );
 	void WeaponIdle( void );
+	float m_flSoundDelay;
 
 	BOOL m_fInZoom;// don't save this. 
 
@@ -809,6 +811,7 @@ public:
 	BOOL Deploy( );
 	void Reload( void );
 	void WeaponIdle( void );
+	void ItemPostFrame(void);
 	int m_fInReload;
 	float m_flNextReload;
 	int m_iShell;
@@ -853,7 +856,7 @@ public:
 
 	void Spawn( void );
 	void Precache( void );
-	//void Reload( void );
+	void Reload( void );
 	int iItemSlot( void ) { return 4; }
 	int GetItemInfo(ItemInfo *p);
 	int AddToPlayer( CBasePlayer *pPlayer );
@@ -866,11 +869,11 @@ public:
 	void SecondaryAttack( void );
 	void WeaponIdle( void );
 
-	//void UpdateSpot( void );
+	void UpdateSpot( void );
 	BOOL ShouldWeaponIdle( void ) { return TRUE; };
 
-	//CLaserSpot *m_pSpot;
-	//int m_fSpotActive;
+	CLaserSpot *m_pSpot;
+	int m_fSpotActive;
 	int m_cActiveRockets;// how many missiles in flight from this launcher right now?
 
 	virtual BOOL UseDecrement( void )
@@ -899,10 +902,12 @@ public:
 	void EXPORT IgniteThink( void );
 	void EXPORT RocketTouch( CBaseEntity *pOther );
 	static CRpgRocket *CreateRpgRocket( Vector vecOrigin, Vector vecAngles, CBaseEntity *pOwner, CRpg *pLauncher );
+	void Explode(TraceResult* pTrace, int bitsDamageType);
+	inline CRpg* GetLauncher(void);
 
 	int m_iTrail;
 	float m_flIgniteTime;
-	CRpg *m_pLauncher;// pointer back to the launcher that fired me. 
+	EHANDLE m_hLauncher;// pointer back to the launcher that fired me. 
 };
 
 class CGauss : public CBasePlayerWeapon
@@ -1024,6 +1029,11 @@ class CHgun : public CBasePlayerWeapon
 
 	typedef CBasePlayerWeapon BaseClass;
 public:
+#if !CLIENT_DLL
+	int		Save(CSave& save);
+	int		Restore(CRestore& restore);
+	static	TYPEDESCRIPTION m_SaveData[];
+#endif
 	void Spawn( void );
 	void Precache( void );
 	int iItemSlot( void ) { return 4; }

@@ -2,8 +2,10 @@
 #include "cl_util.h"
 #include "parsemsg.h"
 #include "hud_servers.h"
+#if USE_VGUI
 #include "vgui_int.h"
 #include "vgui_TeamFortressViewport.h"
+#endif
 #include "triangleapi.h"
 #include "r_studioint.h"
 #include "com_model.h"

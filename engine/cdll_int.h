@@ -27,10 +27,6 @@ extern "C" {
 #endif
 
 #include "const.h"
-#include "steam/steamtypes.h"
-#include "ref_params.h"
-#include "r_efx.h"
-#include "studio_event.h"
 
 #define MAX_ALIAS_NAME	32
 
@@ -61,7 +57,6 @@ typedef struct SCREENINFO_s
 	int		iCharHeight;
 	short		charWidths[256];
 } SCREENINFO;
-
 
 typedef struct client_data_s
 {

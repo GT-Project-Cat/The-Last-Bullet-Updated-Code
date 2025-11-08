@@ -429,7 +429,6 @@ void EV_HLDM_FireBullets( int idx, float *forward, float *right, float *up, int 
 		vec3_t vecDir, vecEnd;
 		float x, y, z;
 
-		float x, y, z;
 		//We randomize for the Shotgun.
 		if( iBulletType == BULLET_PLAYER_BUCKSHOT )
 		{
@@ -1051,19 +1050,6 @@ void EV_FireGlock2( event_args_t *args )
 	EV_FireGlock_Impl( args );
 }
 
-	EV_GetDefaultShellInfo( args, origin, velocity, ShellVelocity, ShellOrigin, forward, right, up, 20, -12, 4 );
-
-	EV_EjectBrass ( ShellOrigin, ShellVelocity, angles[ YAW ], shell, TE_BOUNCE_SHELL ); 
-
-	gEngfuncs.pEventAPI->EV_PlaySound( idx, origin, CHAN_WEAPON, "weapons/pl_gun3.wav", gEngfuncs.pfnRandomFloat(0.92, 1.0), ATTN_NORM, 0, 98 + gEngfuncs.pfnRandomLong( 0, 3 ) );
-
-	EV_GetGunPosition( args, vecSrc, origin );
-	
-	VectorCopy( forward, vecAiming );
-
-	EV_HLDM_FireBullets( idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx-1], args->fparam1, args->fparam2 );
-	
-}
 //======================
 //	   GLOCK END
 //======================
@@ -1163,7 +1149,7 @@ void EV_TeterevFire(event_args_t* args)
 //
 //	VectorCopy(forward, vecAiming);
 //
-//	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+//	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 //
 //}
 //======================
@@ -1313,7 +1299,7 @@ void EV_MariaFire(event_args_t* args)
 //
 //	VectorCopy(forward, vecAiming);
 //
-//	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+//	EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_9MM, 0, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 //
 //}
 //======================
@@ -2743,11 +2729,11 @@ void EV_FireVenom(event_args_t* args)
 
 	if (gEngfuncs.GetMaxClients() > 1)
 	{
-		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_338, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_338, 2, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 	}
 	else
 	{
-		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_338, 2, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+		EV_HLDM_FireBullets(idx, forward, right, up, 1, vecSrc, vecAiming, 8192, BULLET_PLAYER_338, 2, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 	}
 }
 
@@ -2852,7 +2838,7 @@ void EV_PpshFire(event_args_t* args)//рисуем выстрел
 	VectorCopy(forward, vecAiming);//копируем вектор направления пули
 
 	//стреляем
-	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 
 }
 
@@ -2915,7 +2901,7 @@ void EV_TommyFire(event_args_t* args)//рисуем выстрел
 	VectorCopy(forward, vecAiming);//копируем вектор направления пули
 
 	//стреляем
-	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 
 }
 
@@ -2978,7 +2964,7 @@ void EV_StenFire(event_args_t *args)//рисуем выстрел
 	VectorCopy(forward, vecAiming);//копируем вектор направления пули
 
 	//стреляем
-	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP5/*тип пуль */, 2/*количество трассирующих пуль*/, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 
 	}
 
@@ -3047,7 +3033,7 @@ void EV_Mp44Fire(event_args_t *args)//рисуем выстрел
 	VectorCopy(forward, vecAiming);//копируем вектор направления пули
 
 	//стреляем
-	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP44AMM/*тип пуль */, 2/*количество трассирующих пуль*/, &tracerCount[idx - 1], args->fparam1, args->fparam2);
+	EV_HLDM_FireBullets(idx, forward, right, up, 1/*количество пуль вылетающих одновременно*/, vecSrc/*откуда вылетает пуля (позиция пушки)*/, vecAiming/*куда попадает пуля*/, 8192/*дальность*/, BULLET_PLAYER_MP44AMM/*тип пуль */, 2/*количество трассирующих пуль*/, &g_tracerCount[idx - 1], args->fparam1, args->fparam2);
 
 }
 

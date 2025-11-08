@@ -499,14 +499,14 @@ void CEgon::WeaponIdle( void )
 	m_deployed = TRUE;
 }
 
-BOOL CEgon::CanHolster( void )
-{
-#if CLIENT_DLL
-	return TRUE;
-#else
-	return !g_pGameRules->IsBustingGame();
-#endif
-}
+//BOOL CEgon::CanHolster( void )
+//{
+//#if CLIENT_DLL
+//	return TRUE;
+//#else
+//	return !g_pGameRules->IsBustingGame();
+//#endif
+//}
 
 void CEgon::EndAttack( void )
 {

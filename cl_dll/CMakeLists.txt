@@ -77,6 +77,21 @@ set (CLDLL_SOURCES
 	../dlls/squeakgrenade.cpp
 	../dlls/tripmine.cpp
 	../dlls/glock.cpp
+	../dlls/Colt_Maria.cpp
+	../dlls/EnergoGun.cpp
+	../dlls/ExampleGun.cpp
+	../dlls/K43_Rifle.cpp
+	../dlls/MP44.cpp
+	../dlls/plasmagun.cpp
+	../dlls/plasmarifle.cpp
+	../dlls/plasmarifle_weapon.h
+	../dlls/ppsh_weapons.cpp
+	../dlls/rifle.cpp
+	../dlls/Sten.cpp
+	../dlls/teterev.cpp
+	../dlls/TommyGun.cpp
+	../dlls/venom.cpp
+	../dlls/Knife.cpp
 	ev_hldm.cpp
 	hl/hl_baseentity.cpp
 	hl/hl_events.cpp
@@ -102,6 +117,9 @@ set (CLDLL_SOURCES
 	hud_redraw.cpp
 	hud_spectator.cpp
 	hud_update.cpp
+	hud_use.cpp
+	helmet.cpp
+	zoom.cpp
 	in_camera.cpp
 	input.cpp
 	input_goldsource.cpp

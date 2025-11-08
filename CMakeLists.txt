@@ -36,7 +36,7 @@ include(CheckCSourceCompiles)
 include(VSForceXPToolchain) # Force XP toolchain for Visual Studio
 include(CheckIPOSupported)
 
-project (HLSDK-PORTABLE)
+project (The-Last-Bullet)
 
 #--------------
 # USER DEFINES \

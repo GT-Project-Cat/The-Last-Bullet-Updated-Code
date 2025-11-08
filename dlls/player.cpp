@@ -2094,7 +2094,7 @@ void CBasePlayer::CheckTimeBasedDamage()
 		return;
 
 	// only check for time based damage approx. every 2 seconds
-	if (V_fabs(gpGlobals->time - m_tbdPrev) < 2.0f)
+	if (fabs(gpGlobals->time - m_tbdPrev) < 2.0f)
 		return;
 	
 	m_tbdPrev = gpGlobals->time;
@@ -2353,31 +2353,30 @@ void CBasePlayer::CheckSuitUpdate()
 // seconds, then we won't repeat playback of this word or sentence
 // for at least that number of seconds.
 
-void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
+void CBasePlayer::SetSuitUpdate(const char* name, int fgroup, int iNoRepeatTime)
 {
 	int i;
 	int isentence;
 	int iempty = -1;
-	
-	
+
 	// Ignore suit updates if no suit
-	if ( !(pev->weapons & (1<<WEAPON_SUIT)) )
+	if (!(pev->weapons & (1 << WEAPON_SUIT)))
 		return;
 
-	if ( g_pGameRules->IsMultiplayer() )
+	if (g_pGameRules->IsMultiplayer())
 	{
 		// due to static channel design, etc. We don't play HEV sounds in multiplayer right now.
 		return;
 	}
 
 	// if name == NULL, then clear out the queue
-
 	if (!name)
 	{
 		for (i = 0; i < CSUITPLAYLIST; i++)
 			m_rgSuitPlayList[i] = 0;
 		return;
 	}
+
 	// get sentence or group number
 	if (!fgroup)
 	{
@@ -2392,45 +2391,41 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 	// check norepeat list - this list lets us cancel
 	// the playback of words or sentences that have already
 	// been played within a certain time.
-
 	for (i = 0; i < CSUITNOREPEAT; i++)
 	{
 		if (isentence == m_rgiSuitNoRepeat[i])
-			{
+		{
 			// this sentence or group is already in 
 			// the norepeat list
-
 			if (m_rgflSuitNoRepeatTime[i] < gpGlobals->time)
-				{
+			{
 				// norepeat time has expired, clear it out
 				m_rgiSuitNoRepeat[i] = 0;
 				m_rgflSuitNoRepeatTime[i] = 0.0;
 				iempty = i;
 				break;
-				}
+			}
 			else
-				{
+			{
 				// don't play, still marked as norepeat
 				return;
-				}
 			}
+		}
 		// keep track of empty slot
 		if (!m_rgiSuitNoRepeat[i])
 			iempty = i;
 	}
 
 	// sentence is not in norepeat list, save if norepeat time was given
-
 	if (iNoRepeatTime)
 	{
 		if (iempty < 0)
-			iempty = RANDOM_LONG(0, CSUITNOREPEAT-1); // pick random slot to take over
+			iempty = RANDOM_LONG(0, CSUITNOREPEAT - 1); // pick random slot to take over
 		m_rgiSuitNoRepeat[iempty] = isentence;
 		m_rgflSuitNoRepeatTime[iempty] = iNoRepeatTime + gpGlobals->time;
 	}
 
 	// find empty spot in queue, or overwrite last spot
-	
 	m_rgSuitPlayList[m_iSuitPlayNext++] = isentence;
 	if (m_iSuitPlayNext == CSUITPLAYLIST)
 		m_iSuitPlayNext = 0;
@@ -2440,10 +2435,9 @@ void CBasePlayer::SetSuitUpdate(char *name, int fgroup, int iNoRepeatTime)
 		if (m_flSuitUpdate == 0)
 			// play queue is empty, don't delay too long before playback
 			m_flSuitUpdate = gpGlobals->time + SUITFIRSTUPDATETIME;
-		else 
-			m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME; 
+		else
+			m_flSuitUpdate = gpGlobals->time + SUITUPDATETIME;
 	}
-
 }
 
 /*
@@ -3326,13 +3320,11 @@ void CBloodSplat::Spray ( void )
 {
 	TraceResult	tr;	
 	
-	if ( g_Language != LANGUAGE_GERMAN )
-	{
-		UTIL_MakeVectors(pev->angles);
-		UTIL_TraceLine ( pev->origin, pev->origin + gpGlobals->v_forward * 128, ignore_monsters, pev->owner, & tr);
+	UTIL_MakeVectors(pev->angles);
+	UTIL_TraceLine ( pev->origin, pev->origin + gpGlobals->v_forward * 128, ignore_monsters, pev->owner, & tr);
 
-		UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
-	}
+	UTIL_BloodDecalTrace( &tr, BLOOD_COLOR_RED );
+	
 	SetThink ( &CBloodSplat::SUB_Remove );
 	pev->nextthink = gpGlobals->time + 0.1;
 }
@@ -3780,22 +3772,26 @@ int CBasePlayer::AddPlayerItem( CBasePlayerItem *pItem )
 
 
 
-int CBasePlayer::RemovePlayerItem( CBasePlayerItem *pItem )
+int CBasePlayer::RemovePlayerItem(CBasePlayerItem* pItem, bool bCallHolster)
 {
+	pItem->pev->nextthink = 0;// crowbar may be trying to swing again, etc.
+	pItem->SetThink(NULL);
+
 	if (m_pActiveItem == pItem)
 	{
-		ResetAutoaim( );
-		pItem->Holster( );
-		pItem->pev->nextthink = 0;// crowbar may be trying to swing again, etc.
-		pItem->SetThink( NULL );
+		ResetAutoaim();
+		if (bCallHolster)
+			pItem->Holster();
 		m_pActiveItem = NULL;
 		pev->viewmodel = 0;
 		pev->weaponmodel = 0;
 	}
-	else if ( m_pLastItem == pItem )
+
+	// In some cases an item can be both the active and last item, like for instance dropping all weapons and only having an exhaustible weapon left. - Solokiller
+	if (m_pLastItem == pItem)
 		m_pLastItem = NULL;
 
-	CBasePlayerItem *pPrev = m_rgpPlayerItems[pItem->iItemSlot()];
+	CBasePlayerItem* pPrev = m_rgpPlayerItems[pItem->iItemSlot()];
 
 	if (pPrev == pItem)
 	{
@@ -3817,19 +3813,18 @@ int CBasePlayer::RemovePlayerItem( CBasePlayerItem *pItem )
 	return FALSE;
 }
 
-
 //
 // Returns the unique ID for the ammo, or -1 if error
 //
-int CBasePlayer :: GiveAmmo( int iCount, char *szName, int iMax )
+int CBasePlayer::GiveAmmo(int iCount, const char* szName, int iMax)
 {
-	if ( !szName )
+	if (!szName)
 	{
 		// no ammo.
 		return -1;
 	}
 
-	if ( !g_pGameRules->CanHaveAmmo( this, szName, iMax ) )
+	if (!g_pGameRules->CanHaveAmmo(this, szName, iMax))
 	{
 		// game rules say I can't have any more of this ammo type.
 		return -1;
@@ -3837,24 +3832,23 @@ int CBasePlayer :: GiveAmmo( int iCount, char *szName, int iMax )
 
 	int i = 0;
 
-	i = GetAmmoIndex( szName );
+	i = GetAmmoIndex(szName);
 
-	if ( i < 0 || i >= MAX_AMMO_SLOTS )
+	if (i < 0 || i >= MAX_AMMO_SLOTS)
 		return -1;
 
-	int iAdd = min( iCount, iMax - m_rgAmmo[i] );
-	if ( iAdd < 1 )
+	int iAdd = Q_min(iCount, iMax - m_rgAmmo[i]);
+	if (iAdd < 1)
 		return i;
 
-	m_rgAmmo[ i ] += iAdd;
+	m_rgAmmo[i] += iAdd;
 
-
-	if ( gmsgAmmoPickup )  // make sure the ammo messages have been linked first
+	if (gmsgAmmoPickup)  // make sure the ammo messages have been linked first
 	{
 		// Send the message that ammo has been picked up
-		MESSAGE_BEGIN( MSG_ONE, gmsgAmmoPickup, NULL, pev );
-			WRITE_BYTE( GetAmmoIndex(szName) );		// ammo ID
-			WRITE_BYTE( iAdd );		// amount
+		MESSAGE_BEGIN(MSG_ONE, gmsgAmmoPickup, NULL, pev);
+		WRITE_BYTE(GetAmmoIndex(szName));		// ammo ID
+		WRITE_BYTE(iAdd);		// amount
 		MESSAGE_END();
 	}
 
@@ -4273,6 +4267,17 @@ int CBasePlayer :: Illumination( void )
 	return iIllum;
 }
 
+void CBasePlayer::SetPrefsFromUserinfo(char* infobuffer)
+{
+	const char* pszKeyVal;
+
+	pszKeyVal = g_engfuncs.pfnInfoKeyValue(infobuffer, "cl_autowepswitch");
+
+	if (pszKeyVal[0] != '\0')
+		m_iAutoWepSwitch = atoi(pszKeyVal);
+	else
+		m_iAutoWepSwitch = 1;
+}
 
 void CBasePlayer :: EnableControl(BOOL fControl)
 {
@@ -4680,6 +4685,31 @@ BOOL CBasePlayer::HasNamedPlayerItem( const char *pszItemName )
 		while (pItem)
 		{
 			if ( !strcmp( pszItemName, STRING( pItem->pev->classname ) ) )
+			{
+				return TRUE;
+			}
+			pItem = pItem->m_pNext;
+		}
+	}
+
+	return FALSE;
+}
+
+//=========================================================
+// HasPlayerItemFromID
+//=========================================================
+BOOL CBasePlayer::HasPlayerItemFromID(int nID)
+{
+	CBasePlayerItem* pItem;
+	int i;
+
+	for (i = 0; i < MAX_ITEM_TYPES; i++)
+	{
+		pItem = m_rgpPlayerItems[i];
+
+		while (pItem)
+		{
+			if (nID == pItem->m_iId)
 			{
 				return TRUE;
 			}

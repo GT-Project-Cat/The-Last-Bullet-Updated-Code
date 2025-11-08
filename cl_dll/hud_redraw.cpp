@@ -95,7 +95,6 @@ void CHud::Think( void )
 		m_iFOV = gHUD.m_Spectator.GetFOV(); // default_fov->value;
 	}
 
-	Bench_CheckStart();
 }
 
 // Redraw
@@ -176,15 +175,12 @@ int CHud::Redraw( float flTime, int intermission )
 				if ( ( pList->p->m_iFlags & HUD_ACTIVE ) && !( m_iHideHUDDisplay & HIDEHUD_ALL ) )
 					pList->p->Draw( flTime );
 			}
-			}
 			else
 			{
 				// it's an intermission,  so only draw hud elements that are set to draw during intermissions
 				if( pList->p->m_iFlags & HUD_INTERMISSION )
 					pList->p->Draw( flTime );
 			}
-			}
-
 			pList = pList->pNext;
 		}
 	}

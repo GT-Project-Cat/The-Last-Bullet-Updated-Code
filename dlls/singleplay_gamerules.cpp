@@ -97,48 +97,48 @@ BOOL CHalfLifeRules::FShouldSwitchWeapon( CBasePlayer *pPlayer, CBasePlayerItem 
 
 //=========================================================
 //=========================================================
-BOOL HLGetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
+BOOL HLGetNextBestWeapon(CBasePlayer* pPlayer, CBasePlayerItem* pCurrentWeapon)
 {
-	CBasePlayerItem *pCheck;
-	CBasePlayerItem *pBest;// this will be used in the event that we don't find a weapon in the same category.
+	CBasePlayerItem* pCheck;
+	CBasePlayerItem* pBest;// this will be used in the event that we don't find a weapon in the same category.
 	int iBestWeight;
 	int i;
 
 	iBestWeight = -1;// no weapon lower than -1 can be autoswitched to
 	pBest = NULL;
 
-	if( !pCurrentWeapon->CanHolster() )
+	if (!pCurrentWeapon->CanHolster())
 	{
 		// can't put this gun away right now, so can't switch.
 		return FALSE;
 	}
 
-	for( i = 0; i < MAX_ITEM_TYPES; i++ )
+	for (i = 0; i < MAX_ITEM_TYPES; i++)
 	{
 		pCheck = pPlayer->m_rgpPlayerItems[i];
 
-		while( pCheck )
+		while (pCheck)
 		{
-			if( !FBitSet( pCheck->iFlags(), ITEM_FLAG_NOAUTOSWITCHTO ))
+			if (!FBitSet(pCheck->iFlags(), ITEM_FLAG_NOAUTOSWITCHTO))
 			{
-				if( pCheck->iWeight() > -1 && pCheck->iWeight() == pCurrentWeapon->iWeight() && pCheck != pCurrentWeapon )
+				if (pCheck->iWeight() > -1 && pCheck->iWeight() == pCurrentWeapon->iWeight() && pCheck != pCurrentWeapon)
 				{
 					// this weapon is from the same category.
-					if ( pCheck->CanDeploy() )
+					if (pCheck->CanDeploy())
 					{
-						if ( pPlayer->SwitchWeapon( pCheck ) )
+						if (pPlayer->SwitchWeapon(pCheck))
 						{
 							return TRUE;
 						}
 					}
 				}
-				else if( pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon )// don't reselect the weapon we're trying to get rid of
+				else if (pCheck->iWeight() > iBestWeight && pCheck != pCurrentWeapon)// don't reselect the weapon we're trying to get rid of
 				{
 					//ALERT ( at_console, "Considering %s\n", STRING( pCheck->pev->classname ) );
 					// we keep updating the 'best' weapon just in case we can't find a weapon of the same weight
 					// that the player was using. This will end up leaving the player with his heaviest-weighted
 					// weapon.
-					if( pCheck->CanDeploy() )
+					if (pCheck->CanDeploy())
 					{
 						// if this weapon is useable, flag it as the best
 						iBestWeight = pCheck->iWeight();
@@ -156,12 +156,12 @@ BOOL HLGetNextBestWeapon(CBasePlayer *pPlayer, CBasePlayerItem *pCurrentWeapon )
 
 	// if pBest is null, we didn't find ANYTHING. Shouldn't be possible- should always
 	// at least get the crowbar, but ya never know.
-	if( !pBest )
+	if (!pBest)
 	{
 		return FALSE;
 	}
 
-	pPlayer->SwitchWeapon( pBest );
+	pPlayer->SwitchWeapon(pBest);
 
 	return TRUE;
 }

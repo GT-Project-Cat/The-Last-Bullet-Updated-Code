@@ -534,8 +534,6 @@ TYPEDESCRIPTION	CBasePlayerItem::m_SaveData[] =
 };
 IMPLEMENT_SAVERESTORE( CBasePlayerItem, CBaseAnimating );
 
-IMPLEMENT_SAVERESTORE( CBasePlayerItem, CBaseAnimating )
-
 TYPEDESCRIPTION	CBasePlayerWeapon::m_SaveData[] =
 {
 #if CLIENT_WEAPONS
@@ -1861,10 +1859,3 @@ TYPEDESCRIPTION CHgun::m_SaveData[] =
 };
 
 IMPLEMENT_SAVERESTORE(CHgun, CBasePlayerWeapon)
-
-TYPEDESCRIPTION	CSatchel::m_SaveData[] =
-{
-	DEFINE_FIELD(CSatchel, m_chargeReady, FIELD_INTEGER),
-};
-
-IMPLEMENT_SAVERESTORE(CSatchel, CBasePlayerWeapon)

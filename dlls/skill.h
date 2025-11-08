@@ -25,6 +25,8 @@ struct skilldata_t
 
 	// Monster Health & Damage
 	float agruntHealth;
+	float supergruntHealth;
+	float bosssgruntHealth;
 	float agruntDmgPunch;
 
 	float apacheHealth;
@@ -92,6 +94,10 @@ struct skilldata_t
 	float miniturretHealth;
 	float sentryHealth;
 
+	float pitdroneDmgSpit;
+	float pitdroneDmgBite;
+	float pitdroneDmgWhip;
+
 	// Player Weapons
 	float plrDmgCrowbar;
 	float plrDmg9MM;
@@ -109,6 +115,12 @@ struct skilldata_t
 	float plrDmgHandGrenade;
 	float plrDmgSatchel;
 	float plrDmgTripmine;
+	float plrDmgSniper;
+	float plrDmgMP44AMM;
+	float plrDmgK43;
+	float plrDmgPPSHAMMO;
+	float plrDmgTOMMYAMMO;
+	float plrDmgPlasma;
 	
 	// weapons shared by monsters
 	float monDmg9MM;
@@ -122,6 +134,13 @@ struct skilldata_t
 	float healthchargerCapacity;
 	float healthkitCapacity;
 	float scientistHeal;
+	float cacaohealth;
+	float whiskeyHealth;
+	float EatHealthKit;
+	float ArmorBody; //бронежелет
+	float JacketArmor; //куртка
+	float ArmorHelmet;// немецкий шлем
+	float DowaHelmet;//  шлем довакина
 
 	// monster damage adj
 	float monHead;

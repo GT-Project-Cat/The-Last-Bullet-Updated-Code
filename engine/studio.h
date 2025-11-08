@@ -16,12 +16,6 @@
 #if !defined(STUDIO_H)
 #define STUDIO_H
 
-
-
-
-#ifndef _STUDIO_H_
-#define _STUDIO_H_
-
 /*
 ==============================================================================
 
@@ -187,7 +181,6 @@ typedef struct
 	float		scale[6];		// scale for delta DoF values
 } mstudiobone_t;
 
-
 // bone controllers
 typedef struct 
 {
@@ -216,9 +209,7 @@ typedef struct cache_user_s
 } cache_user_t;
 #endif
 
-//
 // demand loaded sequence groups
-//
 typedef struct
 {
 	char		label[32];	// textual name
@@ -275,15 +266,6 @@ typedef struct
 
 // events
 #include "studio_event.h"
-/*
-typedef struct 
-{
-	int 				frame;
-	int					event;
-	int					type;
-	char				options[64];
-} mstudioevent_t;
-*/
 
 // pivots
 typedef struct 
@@ -319,8 +301,6 @@ typedef union
 	short		value;
 } mstudioanimvalue_t;
 
-
-
 // body part index
 typedef struct
 {
@@ -329,8 +309,6 @@ typedef struct
 	int		base;
 	int		modelindex;	// index into models array
 } mstudiobodyparts_t;
-
-
 
 // skin info
 typedef struct mstudiotex_s
@@ -342,7 +320,6 @@ typedef struct mstudiotex_s
 	int		height;
 	int		index;
 } mstudiotexture_t;
-
 
 // skin families
 // short	index[skinfamilies][skinref]
@@ -382,53 +359,11 @@ typedef struct
 } mstudiomesh_t;
 
 // triangles
-#if 0
 typedef struct 
 {
 	short		vertindex;	// index into vertex array
 	short		normindex;	// index into normal array
 	short		s,t;		// s,t position on skin
 } mstudiotrivert_t;
-#endif
-
-// lighting options
-#define STUDIO_NF_FLATSHADE		0x0001
-#define STUDIO_NF_CHROME		0x0002
-#define STUDIO_NF_FULLBRIGHT	0x0004
-#define STUDIO_NF_NOMIPS        0x0008
-#define STUDIO_NF_ALPHA         0x0010
-#define STUDIO_NF_ADDITIVE      0x0020
-#define STUDIO_NF_MASKED        0x0040
-
-// motion flags
-#define STUDIO_X		0x0001
-#define STUDIO_Y		0x0002	
-#define STUDIO_Z		0x0004
-#define STUDIO_XR		0x0008
-#define STUDIO_YR		0x0010
-#define STUDIO_ZR		0x0020
-#define STUDIO_LX		0x0040
-#define STUDIO_LY		0x0080
-#define STUDIO_LZ		0x0100
-#define STUDIO_AX		0x0200
-#define STUDIO_AY		0x0400
-#define STUDIO_AZ		0x0800
-#define STUDIO_AXR		0x1000
-#define STUDIO_AYR		0x2000
-#define STUDIO_AZR		0x4000
-#define STUDIO_TYPES	0x7FFF
-#define STUDIO_RLOOP	0x8000	// controller that wraps shortest distance
-
-// sequence flags
-#define STUDIO_LOOPING	0x0001
-
-// bone flags
-#define STUDIO_HAS_NORMALS	0x0001
-#define STUDIO_HAS_VERTICES 0x0002
-#define STUDIO_HAS_BBOX		0x0004
-#define STUDIO_HAS_CHROME	0x0008	// if any of the textures have chrome on them
-
-#define RAD_TO_STUDIO		(32768.0/M_PI)
-#define STUDIO_TO_RAD		(M_PI/32768.0)
 
 #endif//STUDIO_H

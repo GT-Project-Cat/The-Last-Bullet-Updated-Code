@@ -134,8 +134,6 @@ int CHudMenu::Draw( float flTime )
 {
 	int i;
 
-int CHudMenu :: Draw( float flTime )
-{
 	// check for if menu is set to disappear
 	if( m_flShutoffTime > 0 )
 	{
@@ -201,12 +199,10 @@ int CHudMenu :: Draw( float flTime )
 			if( menu_ralign )
 				// IMPORTANT: Right-to-left rendered text does not parse escape tokens!
 				menu_x = gHUD.DrawHudStringReverse( menu_x, y, 0, menubuf, menu_r, menu_g, menu_b );
-			else menu_x = gHUD.DrawHudString( menu_x, y, 320, menubuf, menu_r, menu_g, menu_b );
-		}
 			else
 			{
 				menu_x = gHUD.DrawHudString( menu_x, y, 320, menubuf, menu_r, menu_g, menu_b );
-	}
+			}
 		}
 	}
 

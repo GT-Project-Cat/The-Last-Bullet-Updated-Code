@@ -2,8 +2,10 @@
 #include "cl_util.h"
 #include "parsemsg.h"
 #include "triangleapi.h"
+#if USE_VGUI
 #include "VGUI_TextImage.h"
 #include "vgui_loadtga.h"
+#endif
 #include <string.h>
 #include <stdio.h>
 
