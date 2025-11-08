@@ -185,16 +185,6 @@ void __CmdFunc_ForceCloseCommandMenu( void )
 #endif
 }
 
-void __CmdFunc_ToggleServerBrowser( void )
-{
-#if USE_VGUI
-	if ( gViewPort )
-	{
-		gViewPort->ToggleServerBrowser();
-	}
-#endif
-}
-
 // TFFree Command Menu Message Handlers
 int __MsgFunc_ValClass( const char *pszName, int iSize, void *pbuf )
 {
