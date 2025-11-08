@@ -115,7 +115,7 @@ void CVenom::ItemPostFrame()
 	if ((m_fInReload) && (m_pPlayer->m_flNextAttack <= 0.0))
 	{
 		// complete the reload. 
-		int j = min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
+		int j = Q_min(iMaxClip() - m_iClip, m_pPlayer->m_rgAmmo[m_iPrimaryAmmoType]);
 
 		// Add them to the clip
 		m_iClip += j;
@@ -257,7 +257,7 @@ void CVenom::Spinup()
 #else
 	flags = 0;
 #endif
-	m_flRotationSpeed = min(1, m_flRotationSpeed + (gpGlobals->frametime / VENOM_WIND_TIME));
+	m_flRotationSpeed = Q_min(1, m_flRotationSpeed + (gpGlobals->frametime / VENOM_WIND_TIME));
 	//PLAYBACK_EVENT_FULL(flags, m_pPlayer->edict(), m_usVenom3, 0.0, (float*)&g_vecZero, (float*)&g_vecZero, 0, 0, 0, 0, 0, 0);
 	
 	if (!m_fInAttack)
@@ -377,7 +377,7 @@ void CVenom::ReduceRotation(void)
 {
 	if (m_flRotationSpeed > 0)
 	{
-		m_flRotationSpeed = max(0, m_flRotationSpeed - (gpGlobals->frametime / VENOM_WIND_TIME));
+		m_flRotationSpeed = Q_max(0, m_flRotationSpeed - (gpGlobals->frametime / VENOM_WIND_TIME));
 	}
 }
 

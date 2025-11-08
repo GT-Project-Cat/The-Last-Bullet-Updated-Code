@@ -242,7 +242,7 @@ class CItemBattery : public CItem
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += gSkillData.batteryCapacity;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND( pPlayer->edict(), CHAN_ITEM, "items/gunpickup2.wav", 1, ATTN_NORM );
 
@@ -297,7 +297,7 @@ class CArmorBody : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += gSkillData.ArmorBody;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/armorbody.wav", 1, ATTN_NORM);
 
@@ -352,7 +352,7 @@ class CJacketArmor : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += gSkillData.JacketArmor;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/jacket.wav", 1, ATTN_NORM);
 
@@ -407,7 +407,7 @@ class CArmorHelmet : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += gSkillData.ArmorHelmet;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/helmet.wav", 1, ATTN_NORM);
 
@@ -462,7 +462,7 @@ class CDowaHelmet : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += gSkillData.DowaHelmet;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/dowahelmet.wav", 1, ATTN_NORM);
 
@@ -632,7 +632,7 @@ class CSpaceArmor : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += 65;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/spacearmor.wav", 1, ATTN_NORM);
 
@@ -691,7 +691,7 @@ class CBonusArmor : public CItemBattery
 			char szcharge[64];
 
 			pPlayer->pev->armorvalue += 25;
-			pPlayer->pev->armorvalue = min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
+			pPlayer->pev->armorvalue = Q_min(pPlayer->pev->armorvalue, MAX_NORMAL_BATTERY);
 
 			EMIT_SOUND(pPlayer->edict(), CHAN_ITEM, "TLB/armor/spacearmor.wav", 1, ATTN_NORM);
 
