@@ -396,6 +396,8 @@ int CHudHealth::DrawDamage( float flTime )
 	{
 		if( m_bitsDamage & giDmgFlags[i] )
 		{
+			pdmg = &m_dmg[i];
+
 			// Draw all the items
 			SPR_Set( gHUD.GetSprite( m_HUD_dmg_bio + i ), r, g, b );
 			SPR_DrawAdditive( 0, pdmg->x, pdmg->y, &gHUD.GetSpriteRect( m_HUD_dmg_bio + i ) );
