@@ -893,15 +893,15 @@ void GameDLLInit( void )
 	CVAR_REGISTER ( &sk_plr_MP44AMM_bullet2 );// {"sk_plr_MP44AMM_bullet2","0"};
 	CVAR_REGISTER ( &sk_plr_MP44AMM_bullet3 );// {"sk_plr_MP44AMM_bullet3","0"};
 
-	//////ppsh//
-	//CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet1);// {"sk_plr_PPSH_bullett1","0"};
-	//CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet2);// {"sk_plr_PPSH_bullett2","0"};
-	//CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet3);// {"sk_plr_PPSH_bullet3","0"};
-	////
-	////// tommy//
-	//CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet1);// {"sk_plr_TOMMY_bullet1","0"};
-	//CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet2);// {"sk_plr_TOMMY_bullet2","0"};
-	//CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet3);// {"sk_plr_TOMMY_bullet3","0"};
+	////ppsh//
+	CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet1);// {"sk_plr_PPSH_bullett1","0"};
+	CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet2);// {"sk_plr_PPSH_bullett2","0"};
+	CVAR_REGISTER(&sk_plr_PPSHAMMO_bullet3);// {"sk_plr_PPSH_bullet3","0"};
+	//
+	//// tommy//
+	CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet1);// {"sk_plr_TOMMY_bullet1","0"};
+	CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet2);// {"sk_plr_TOMMY_bullet2","0"};
+	CVAR_REGISTER(&sk_plr_TOMMYAMMO_bullet3);// {"sk_plr_TOMMY_bullet3","0"};
 
 
 	//k43
@@ -967,6 +967,11 @@ void GameDLLInit( void )
 	CVAR_REGISTER( &sk_plr_tripmine1 );// {"sk_plr_tripmine1","0"};
 	CVAR_REGISTER( &sk_plr_tripmine2 );// {"sk_plr_tripmine2","0"};
 	CVAR_REGISTER( &sk_plr_tripmine3 );// {"sk_plr_tripmine3","0"};
+
+	// Rifle
+	CVAR_REGISTER(&sk_plr_snpr_bullet1);// {"sk_plr_bullet1","0"};
+	CVAR_REGISTER(&sk_plr_snpr_bullet2);// {"sk_plr_bullet2","0"};
+	CVAR_REGISTER(&sk_plr_snpr_bullet3);// {"sk_plr_bullet3","0"};
 
 	// WORLD WEAPONS
 	CVAR_REGISTER( &sk_12mm_bullet1 );// {"sk_12mm_bullet1","0"};
