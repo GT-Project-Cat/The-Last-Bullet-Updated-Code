@@ -365,7 +365,7 @@ void CHudAmmo::Think( void )
 			{
 				if( gHUD.m_iWeaponBits & ( 1 << p->iId ) )
 					gWR.PickupWeapon( p );
-				else
+				else if(!gWR.GetWeaponSlot(p->iSlot, p->iSlotPos)) // Must check if we have a weapon already in the slot
 					gWR.DropWeapon( p );
 			}
 		}
