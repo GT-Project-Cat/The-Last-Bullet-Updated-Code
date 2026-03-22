@@ -390,7 +390,7 @@ void W_Precache( void )
 
 		////energo_gun
 		UTIL_PrecacheOtherWeapon("weapon_plasmarifle");
-		UTIL_PrecacheOther("ammo_plasmo");
+		UTIL_PrecacheOther("ammo_plasma");
 ////teterev
 		UTIL_PrecacheOtherWeapon("weapon_teterev");
 		UTIL_PrecacheOther("ammo_pm");
@@ -434,7 +434,7 @@ void W_Precache( void )
 
 	// Rifle
 	UTIL_PrecacheOtherWeapon("weapon_sniperrifle");
-	UTIL_PrecacheOther("ammo_338");
+	//UTIL_PrecacheOther("ammo_338");
 
 	// mp44
 	UTIL_PrecacheOtherWeapon("weapon_mp44");
@@ -447,6 +447,8 @@ void W_Precache( void )
 	// Venom
 	UTIL_PrecacheOtherWeapon("weapon_venom");
 	//UTIL_PrecacheOther("ammo_338");
+	UTIL_PrecacheOther("ammo_venomclip");
+	UTIL_PrecacheOther("ammo_venombox");
 
 #if !defined( OEM_BUILD ) && !defined( HLDEMO_BUILD )
 	// satchel charge
