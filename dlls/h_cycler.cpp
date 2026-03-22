@@ -140,6 +140,9 @@ void CCycler::Spawn()
 	{
 		m_animate = 1;
 	}
+
+	m_bloodColor = DONT_BLEED;
+	pev->takedamage = DAMAGE_NO;
 }
 
 //
