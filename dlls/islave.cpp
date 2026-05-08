@@ -786,7 +786,7 @@ void CISlave::WackBeam( int side, CBaseEntity *pEntity )
 
 	m_pBeam[m_iBeams]->PointEntInit( pEntity->Center(), entindex() );
 	m_pBeam[m_iBeams]->SetEndAttachment( side < 0 ? 2 : 1 );
-	m_pBeam[m_iBeams]->SetColor( 180, 255, 96 );
+	m_pBeam[m_iBeams]->SetColor(148, 0, 211); // фиолетовые лучи
 	m_pBeam[m_iBeams]->SetBrightness( 255 );
 	m_pBeam[m_iBeams]->SetNoise( 80 );
 	m_pBeam[m_iBeams]->pev->spawnflags |= SF_BEAM_TEMPORARY; // Flag these to be destroyed on save/restore or level transition
