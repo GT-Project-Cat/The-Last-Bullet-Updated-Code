@@ -536,7 +536,14 @@ void CISlave::Spawn()
 //=========================================================
 void CISlave::Precache()
 {
-	PRECACHE_MODEL( "models/islave.mdl" );
+	if (pev->model)
+	{
+		PRECACHE_MODEL(STRING(pev->model));
+	}
+	else
+	{
+		PRECACHE_MODEL("models/islave.mdl");
+	}
 	PRECACHE_MODEL( "sprites/lgtning.spr" );
 	PRECACHE_SOUND( "debris/zap1.wav" );
 	PRECACHE_SOUND( "debris/zap4.wav" );
