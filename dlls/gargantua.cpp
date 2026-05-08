@@ -1332,6 +1332,8 @@ public:
 	void Spawn(void);
 	void Precache(void);
 	int  Classify(void);
+	//int TakeDamage(entvars_t* pevInflictor, entvars_t* pevAttacker, float flDamage, int bitsDamageType);
+	void Think(void);
 };
 
 LINK_ENTITY_TO_CLASS(monster_achiless, CBoss);
@@ -1414,6 +1416,32 @@ void CBoss::Precache()
 int	CBoss::Classify(void)
 {
 	return	CLASS_HUMAN_MILITARY;
+}
+
+void CBoss::Think(void)
+{
+	if (pev->health > pev->max_health*0.75f)
+	{
+		pev->skin = 0;
+	} 
+	else if (pev->health <= pev->max_health * 0.75f && pev->health > pev->max_health * 0.5f)
+	{
+		pev->skin = 1;
+	}
+	else if (pev->health <= pev->max_health * 0.5f && pev->health > pev->max_health * 0.2f)
+	{
+		pev->skin = 2;
+	}
+	else if (pev->health <= pev->max_health * 0.2f && pev->health > 0.0f)
+	{
+		pev->skin = 3;
+	}
+	else if (pev->health <= 0)
+	{
+		pev->skin = 4;
+	}
+
+	CGargantua::Think();
 }
 
 void CSpiral::Spawn(void)
