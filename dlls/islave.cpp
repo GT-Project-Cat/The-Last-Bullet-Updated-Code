@@ -508,7 +508,12 @@ void CISlave::Spawn()
 {
 	Precache();
 
-	SET_MODEL( ENT( pev ), "models/islave.mdl" );
+	if (pev->model)
+	{
+		SET_MODEL(ENT(pev), STRING(pev->model));
+	}
+	else SET_MODEL( ENT( pev ), "models/islave.mdl" );
+
 	UTIL_SetSize( pev, VEC_HUMAN_HULL_MIN, VEC_HUMAN_HULL_MAX );
 
 	pev->solid		= SOLID_SLIDEBOX;
