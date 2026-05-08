@@ -396,11 +396,11 @@ int CRpg::GetItemInfo( ItemInfo *p )
 	p->iMaxAmmo1 = ROCKET_MAX_CARRY;
 	p->pszAmmo2 = NULL;
 	p->iMaxAmmo2 = -1;
-	p->iMaxClip = RPG_MAX_CLIP;
+	p->iMaxClip = WEAPON_NOCLIP;
 	p->iSlot = 3;
 	p->iPosition = 0;
 	p->iId = m_iId = WEAPON_RPG;
-	p->iFlags = ITEM_FLAG_NOAUTOSWITCHTO;
+	p->iFlags = 0;
 	p->iWeight = RPG_WEIGHT;
 
 	return 1;
